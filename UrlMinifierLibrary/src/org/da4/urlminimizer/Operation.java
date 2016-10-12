@@ -5,7 +5,8 @@ import java.util.Map;
 
 public enum Operation {
 	
-	PREPROCESSOR("Preprocessor"),POSTPROCESSOR("Postprocessor");
+	MINIMIZE("Minimize"),
+	MAXIMIZE("Maximize");
 	private String strOperation;
 	private static Map<String,Operation> operationMap = new HashMap<String,Operation>();
 	static{

@@ -1,15 +1,16 @@
-package org.da4.urlminimizer.plugins;
+package org.da4.urlminimizer.plugins.sql;
 
 import java.util.Map;
 
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
+import org.da4.urlminimizer.plugins.PluginAPI;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-public class UrlReservationPlugin extends PluginAPI {
+public class JDBCPersistantStoragePlugin extends PluginAPI {
 	BiMap<String,String> aliasToUrlMap = HashBiMap.create();
 	@Override
 	public void init(Map<String, String> params) {
