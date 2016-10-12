@@ -2,16 +2,16 @@ package org.da4.urlminimizer.vo;
 
 import java.util.Map;
 
-import org.da4.urlminimizer.Operation;
+import org.da4.urlminimizer.Hook;
 
 public class PluginVO {
 	String clazz;
-	public PluginVO(String clazz, Operation hook) {
+	public PluginVO(String clazz, Hook hook) {
 		super();
 		this.clazz = clazz;
 		this.hook = hook;
 	}
-	Operation hook;
+	Hook hook;
 	Map<String,String> attributes;
 	public String getClazz() {
 		return clazz;
@@ -19,10 +19,10 @@ public class PluginVO {
 	public void setClazz(String clazz) {
 		this.clazz = clazz;
 	}
-	public Operation getHook() {
+	public Hook getHook() {
 		return hook;
 	}
-	public void setHook(Operation hook) {
+	public void setHook(Hook hook) {
 		this.hook = hook;
 	}
 	public Map<String, String> getAttributes() {

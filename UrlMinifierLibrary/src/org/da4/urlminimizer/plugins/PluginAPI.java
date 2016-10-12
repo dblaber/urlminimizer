@@ -2,6 +2,7 @@ package org.da4.urlminimizer.plugins;
 
 import java.util.Map;
 
+import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 
 public class PluginAPI implements IPlugin {
@@ -23,8 +24,8 @@ public class PluginAPI implements IPlugin {
 	 * @see org.da4.urlminimizer.plugins.IPlugin#execute(org.da4.urlminimizer.Operation, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public Object execute(Operation operation, Object input, Object output) {
-		System.out.println("Starting execution of plugin `"+ this.getClass().getName() +"`...");
+	public Object execute(Hook hook, Operation operation, Object input, Object output) {
+		System.out.println("Starting execution of plugin `"+ this.getClass().getName() +"` , Operation: " + operation +" hook: " + hook + "...");
 		return null;
 	}
 

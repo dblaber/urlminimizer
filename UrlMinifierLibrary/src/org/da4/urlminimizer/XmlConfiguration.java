@@ -39,13 +39,20 @@ public class XmlConfiguration implements IConfig {
 		Attribute attribProdName = rootElement.getAttribute("productName");
 		if(attribProdName == null || attribProdName.getValue() == null ||  attribProdName.getValue().trim().isEmpty())
 			throw new ConfigException("No Product name,or issue with product name");
+		
+		Attribute attribRootUrl = rootElement.getAttribute("rootUrl");
+		if(attribRootUrl == null || attribRootUrl.getValue() == null ||  attribRootUrl.getValue().trim().isEmpty())
+			throw new ConfigException("No Root Url,or issue with URL");
+		
 		config.setProductName(attribProdName.getValue());
+		config.setRootUrl(attribRootUrl.getValue());
+		
 		List<PluginVO> pluginVos = new ArrayList<PluginVO>();
 		List<Element> xmlPluginList = rootElement.getChildren("plugin");
 		for(Element xmlPlugin : xmlPluginList)
 		{
 			PluginVO pluginVo = new PluginVO(xmlPlugin.getAttributeValue("class"),
-					Operation.get(xmlPlugin.getAttributeValue("hook")));
+					Hook.get(xmlPlugin.getAttributeValue("hook")));
 			Map<String,String> attribMap = new LinkedHashMap<String,String>();
 			List<Element> xmlPluginAttribs = xmlPlugin.getChildren("attribute");
 			for(Element xmlAttribute:xmlPluginAttribs)
