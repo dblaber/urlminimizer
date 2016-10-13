@@ -8,6 +8,7 @@ public class URLVO {
 	private String destination;
 	private String creatorClass;
 	private String ip;
+	private String creatorApiKey;
 	boolean isSpam = false;
 	
 	
@@ -47,6 +48,12 @@ public class URLVO {
 	}
 	public void setSpam(boolean isSpam) {
 		this.isSpam = isSpam;
+	}
+	public String getCreatorApiKey() {
+		return creatorApiKey;
+	}
+	public void setCreatorApiKey(String creatorApiKey) {
+		this.creatorApiKey = creatorApiKey;
 	}
 	
 	

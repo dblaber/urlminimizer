@@ -9,7 +9,7 @@ public interface IPlugin {
 
 	void init(Map<String, String> params);
 
-	Object execute(Hook hook,Operation operation, Object input, Object output);
+	Object execute(Hook hook,Operation operation, Object input, Object output, Map<String,Object> params);
 
 	void finished();
 

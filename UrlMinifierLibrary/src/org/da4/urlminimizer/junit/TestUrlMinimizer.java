@@ -1,8 +1,7 @@
 package org.da4.urlminimizer.junit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import static org.junit.Assert.assertNotNull;
 import org.da4.urlminimizer.UrlMinimizer;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.junit.Before;
@@ -10,11 +9,12 @@ import org.junit.Test;
 
 public class TestUrlMinimizer {
 
-	UrlMinimizer mini = null;
+	static UrlMinimizer mini = null;
 	ConfigVO config = null;
 	@Before
 	public void setUp() throws Exception {
-		mini = new UrlMinimizer("/home/dmb/urlmini.xml");
+		if(mini == null)
+			mini = new UrlMinimizer("/home/dmb/urlmini.xml");
 		config = mini.getConfig();
 	}
 
@@ -28,6 +28,12 @@ public class TestUrlMinimizer {
 		String small = mini.minimize("http://google.com");
 		System.out.println("small url: " + small);
 		assertEquals(config.getRootUrl() + "xyz", small);
+		for(int i = 0; i < 100; i++)
+		{
+		small = mini.minimize("http://google2.com" + i);
+		System.out.println("small url" + i + ": " + small);
+		assertNotNull(small);
+		}
 	}
 
 	@Test

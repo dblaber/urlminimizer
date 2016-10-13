@@ -1,6 +1,8 @@
 package org.da4.urlminimizer;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.da4.urlminimizer.exception.ConfigException;
@@ -10,9 +12,9 @@ import org.da4.urlminimizer.vo.PluginVO;
 
 public class UrlMinimizer {
 
-	private Set<IPlugin> preplugins = new HashSet<IPlugin>();
-	private Set<IPlugin> procplugins = new HashSet<IPlugin>();
-	private Set<IPlugin> postplugins = new HashSet<IPlugin>();
+	private Set<IPlugin> preplugins = new LinkedHashSet<IPlugin>();
+	private Set<IPlugin> procplugins = new LinkedHashSet<IPlugin>();
+	private Set<IPlugin> postplugins = new LinkedHashSet<IPlugin>();
 	ConfigVO config = null;
 	public UrlMinimizer(String configFile) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		IConfig configParser = new XmlConfiguration();
@@ -67,17 +69,18 @@ public class UrlMinimizer {
 	public String minimize(String in)
 	{
 		String alias = null;
+		Map<String,Object> paramMap = new HashMap<String,Object>();
 		//preprocessing
 		for(IPlugin preplugins:preplugins)
 		{
-			in = (String)preplugins.execute(Hook.PREPROCESSOR,Operation.MINIMIZE, in, null);
+			in = (String)preplugins.execute(Hook.PREPROCESSOR,Operation.MINIMIZE, in, null,paramMap);
 
 		}
 		
 		//processing
 		for(IPlugin plugin:procplugins)
 		{
-			alias = (String)plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null);
+			alias = (String)plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in,null, paramMap);
 			if(alias != null)
 				break;
 		}
@@ -85,7 +88,7 @@ public class UrlMinimizer {
 		//POSTPROCESSOR
 		for(IPlugin preplugins:preplugins)
 		{
-			alias = (String)preplugins.execute(Hook.POSTPROCESSOR,Operation.MINIMIZE,  in, null);
+			alias = (String)preplugins.execute(Hook.POSTPROCESSOR,Operation.MINIMIZE,  in, null,paramMap);
 		}
 		return config.getRootUrl() + alias;
 	}
@@ -93,17 +96,18 @@ public class UrlMinimizer {
 	public String maximize(String in)
 	{
 		String realUrl = null;
+		Map<String,Object> paramMap = new HashMap<String,Object>();
 		//preprocessing
 		for(IPlugin plugin:preplugins)
 		{
-			in = (String)plugin.execute(Hook.PREPROCESSOR,Operation.MAXIMIZE, in, null);
+			in = (String)plugin.execute(Hook.PREPROCESSOR,Operation.MAXIMIZE, in, null,paramMap);
 
 		}
 		
 		//processing
 		for(IPlugin plugin:procplugins)
 		{
-			realUrl = (String)plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null);
+			realUrl = (String)plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in,null, paramMap);
 			if(realUrl != null)
 				break;
 		}
@@ -111,7 +115,7 @@ public class UrlMinimizer {
 		//POSTPROCESSOR
 		for(IPlugin plugin:preplugins)
 		{
-			realUrl = (String)plugin.execute(Hook.POSTPROCESSOR,Operation.MAXIMIZE,  in, null);
+			realUrl = (String)plugin.execute(Hook.POSTPROCESSOR,Operation.MAXIMIZE,  in, null,paramMap);
 		}
 		return realUrl;
 	}
