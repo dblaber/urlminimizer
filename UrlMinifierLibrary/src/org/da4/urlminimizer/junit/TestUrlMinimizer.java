@@ -41,6 +41,10 @@ public class TestUrlMinimizer {
 		String small = mini.maximize("xyz");
 		System.out.println("big url: " + small);
 		assertEquals("http://google.com", small);
+		
+		small = mini.maximize("68");
+		System.out.println("big url2: " + small);
+		assertNotNull(small);
 	}
 
 }

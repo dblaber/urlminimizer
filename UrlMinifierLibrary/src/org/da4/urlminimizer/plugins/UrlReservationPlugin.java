@@ -5,6 +5,7 @@ import java.util.Map;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
+import org.da4.urlminimizer.vo.URLVO;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -24,7 +25,13 @@ public class UrlReservationPlugin extends PluginAPI {
 		if(Operation.MAXIMIZE.equals(operation))
 		{
 			output = aliasToUrlMap.get(input);
-			return aliasToUrlMap.get(input);	 
+			if(output ==  null)
+				return null;
+			URLVO vo = new URLVO();
+			vo.setAlias((String)input);
+			vo.setDestination((String)output);
+			
+			return vo;	 
 		}
 		else if(Operation.MINIMIZE.equals(operation))
 		{
