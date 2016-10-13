@@ -9,6 +9,7 @@ import org.da4.urlminimizer.exception.ConfigException;
 import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.da4.urlminimizer.vo.PluginVO;
+import org.da4.urlminimizer.vo.URLVO;
 
 public class UrlMinimizer {
 
@@ -107,9 +108,14 @@ public class UrlMinimizer {
 		//processing
 		for(IPlugin plugin:procplugins)
 		{
-			realUrl = (String)plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in,null, paramMap);
-			if(realUrl != null)
+			URLVO out = (URLVO)plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in,null, paramMap);
+			if(out != null)
+			{
+				realUrl = out.getDestination();
 				break;
+			}
+				
+			
 		}
 		
 		//POSTPROCESSOR

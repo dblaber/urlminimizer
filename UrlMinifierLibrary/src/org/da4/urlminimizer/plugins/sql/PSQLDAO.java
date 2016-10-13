@@ -55,7 +55,7 @@ public class PSQLDAO implements IJDBCDAO {
 		
 		vo.setAlias(rs.getString("minified_alias"));
 		vo.setCreatorApiKey(rs.getString("creation_api_key"));
-		vo.setDestination("destination_url");
+		vo.setDestination(rs.getString("destination_url"));
 		vo.setIp(rs.getString("source_ip"));
 		} catch (SQLException e)
 		{
