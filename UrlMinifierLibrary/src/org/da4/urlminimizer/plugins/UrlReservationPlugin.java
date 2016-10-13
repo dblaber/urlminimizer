@@ -11,15 +11,16 @@ import com.google.common.collect.HashBiMap;
 
 public class UrlReservationPlugin extends PluginAPI {
 	BiMap<String,String> aliasToUrlMap = HashBiMap.create();
+	final static  String RESERVED_ALIASES = "RESERVED_ALIASES";
 	@Override
 	public void init(Map<String, String> params) {
 		super.init(params);
 		aliasToUrlMap.putAll(params);
 	}
 	@Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output) {
-		super.execute(hook,operation, input, output);
-		
+	public Object execute(Hook hook, Operation operation, Object input, Object output,Map<String,Object> params) {
+		super.execute(hook,operation, input, output,params);
+		params.put("RESERVED_ALIASES", aliasToUrlMap.keySet());
 		if(Operation.MAXIMIZE.equals(operation))
 		{
 			output = aliasToUrlMap.get(input);

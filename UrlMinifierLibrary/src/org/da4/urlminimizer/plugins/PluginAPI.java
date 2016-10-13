@@ -24,7 +24,7 @@ public class PluginAPI implements IPlugin {
 	 * @see org.da4.urlminimizer.plugins.IPlugin#execute(org.da4.urlminimizer.Operation, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output) {
+	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String,Object> params) {
 		System.out.println("Starting execution of plugin `"+ this.getClass().getName() +"` , Operation: " + operation +" hook: " + hook + "...");
 		return null;
 	}
