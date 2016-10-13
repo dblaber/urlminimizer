@@ -4,23 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Operation {
-	
-	MINIMIZE("Minimize"),
-	MAXIMIZE("Maximize");
+
+	MINIMIZE("Minimize"), MAXIMIZE("Maximize");
 	private String strOperation;
-	private static Map<String,Operation> operationMap = new HashMap<String,Operation>();
-	static{
-		for(Operation operation:Operation.values())
-		{
+	private static Map<String, Operation> operationMap = new HashMap<String, Operation>();
+	static {
+		for (Operation operation : Operation.values()) {
 			operationMap.put(operation.strOperation, operation);
 		}
 	}
-	private Operation(String operation)
-	{
+
+	private Operation(String operation) {
 		this.strOperation = operation;
 	}
-	public static Operation  get(String operation)
-	{
+
+	public static Operation get(String operation) {
 		return operationMap.get(operation);
 	}
 }

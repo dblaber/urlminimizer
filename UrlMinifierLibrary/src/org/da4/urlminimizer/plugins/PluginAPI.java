@@ -11,25 +11,33 @@ public class PluginAPI implements IPlugin {
 		super();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.da4.urlminimizer.plugins.IPlugin#init(java.util.Map)
 	 */
 	@Override
-	public void init(Map<String,String> params) {
-		System.out.println("Starting plugin `"+ this.getClass().getName() +"`...");
+	public void init(Map<String, String> params) {
+		System.out.println("Starting plugin `" + this.getClass().getName() + "`...");
 		System.out.println("Params: " + params);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.da4.urlminimizer.plugins.IPlugin#execute(org.da4.urlminimizer.Operation, java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.da4.urlminimizer.plugins.IPlugin#execute(org.da4.urlminimizer.
+	 * Operation, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String,Object> params) {
-		System.out.println("Starting execution of plugin `"+ this.getClass().getName() +"` , Operation: " + operation +" hook: " + hook + "...");
+	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+		System.out.println("Starting execution of plugin `" + this.getClass().getName() + "` , Operation: " + operation
+				+ " hook: " + hook + "...");
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.da4.urlminimizer.plugins.IPlugin#finished()
 	 */
 	@Override
