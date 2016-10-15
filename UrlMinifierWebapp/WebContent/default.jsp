@@ -47,7 +47,7 @@ main {
 	<main class="u-center-block">
 	<div class="u-center-block__content">
 		<h1 class='c-heading'>ne8.org URL Minimizer</h1>
-		<p1>Short, simple, <a href="https://github.com/dblaber"> Open
+		<p1>Short, simple, <a href="https://github.com/dblaber/urlminimizer"> Open
 			Source! </a></p1>
 		<form action="#">
 			<div class="o-form-element">
