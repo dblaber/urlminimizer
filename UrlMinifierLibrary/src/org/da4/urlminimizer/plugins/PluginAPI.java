@@ -2,11 +2,14 @@ package org.da4.urlminimizer.plugins;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
+import org.da4.urlminimizer.UrlMinimizer;
 
 public class PluginAPI implements IPlugin {
-
+	private static final Logger logger = LogManager.getLogger(PluginAPI.class);
 	public PluginAPI() {
 		super();
 	}
@@ -18,8 +21,8 @@ public class PluginAPI implements IPlugin {
 	 */
 	@Override
 	public void init(Map<String, String> params) {
-		System.out.println("Starting plugin `" + this.getClass().getName() + "`...");
-		System.out.println("Params: " + params);
+		logger.info("Starting plugin `" + this.getClass().getName() + "`...");
+		logger.debug("Params: " + params);
 	}
 
 	/*
@@ -30,7 +33,7 @@ public class PluginAPI implements IPlugin {
 	 */
 	@Override
 	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
-		System.out.println("Starting execution of plugin `" + this.getClass().getName() + "` , Operation: " + operation
+		logger.trace("Starting execution of plugin `" + this.getClass().getName() + "` , Operation: " + operation
 				+ " hook: " + hook + "...");
 		return null;
 	}
@@ -42,7 +45,7 @@ public class PluginAPI implements IPlugin {
 	 */
 	@Override
 	public void finished() {
-		System.out.println("Plugin terminated.");
+		logger.info("Plugin terminated.");
 	}
 
 }

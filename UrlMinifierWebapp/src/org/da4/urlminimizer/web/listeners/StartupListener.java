@@ -5,6 +5,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.UrlMinimizer;
 
 /**
@@ -13,7 +15,7 @@ import org.da4.urlminimizer.UrlMinimizer;
  */
 @WebListener
 public class StartupListener implements ServletContextListener {
-
+	private static final Logger logger = LogManager.getLogger(StartupListener.class);
     /**
      * Default constructor. 
      */
@@ -25,17 +27,20 @@ public class StartupListener implements ServletContextListener {
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
     public void contextDestroyed(ServletContextEvent sce)  { 
-         // TODO Auto-generated method stub
     }
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent sce)  { 
-    	System.out.println("Initializing...");
+    	logger.info("Initializing Application...");
+    	String configFile = System.getProperty("CONFIG_XML");
+    	logger.info("ConfigFile: " + configFile);
+    	if(configFile == null)
+    		throw new RuntimeException("Config File Null! Can not start properly");
     	UrlMinimizer minimizer = null;
 		try {
-			minimizer = new UrlMinimizer("/home/dmb/urlmini.xml");
+			minimizer = new UrlMinimizer(configFile);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

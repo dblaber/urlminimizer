@@ -7,12 +7,15 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.vo.URLVO;
 import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
 
 public class PSQLDAO implements IJDBCDAO {
+	private static final Logger logger = LogManager.getLogger(PSQLDAO.class);
 	final static String SQL_GET_DESTINATION_FROM_ALIAS = "select * from minifier.minimized_urls where minified_alias = ?";
 	final static String SQL_GET_ALIAS_FROM_DESTINATION = "select * from minifier.minimized_urls where destination_url = ?";
 
@@ -52,6 +55,7 @@ public class PSQLDAO implements IJDBCDAO {
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(SQL_GET_DESTINATION_FROM_ALIAS);
+			logger.debug("SQL to be run: "+" " +SQL_GET_DESTINATION_FROM_ALIAS+" " +" Param: "+" " +alias);
 			stmt.setString(1, alias);
 
 			rs = stmt.executeQuery();
@@ -84,6 +88,7 @@ public class PSQLDAO implements IJDBCDAO {
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(SQL_GET_ALIAS_FROM_DESTINATION);
+			logger.debug("SQL to be run: "+" " +SQL_GET_ALIAS_FROM_DESTINATION+" " +" Param: "+" " +destination);
 			stmt.setString(1, destination);
 
 			rs = stmt.executeQuery();
@@ -95,7 +100,7 @@ public class PSQLDAO implements IJDBCDAO {
 			vo.setDestination("destination_url");
 			vo.setIp(rs.getString("source_ip"));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
 		} finally {
 			try {
@@ -122,13 +127,13 @@ public class PSQLDAO implements IJDBCDAO {
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(SQL_GET_NEXT_ID);
-
+			logger.debug("SQL to be run: "+" " +SQL_GET_NEXT_ID);
 			rs = stmt.executeQuery();
 			if (rs.next() == false)
 				return -1;
 			id = rs.getLong(1);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
 		} finally {
 			try {
@@ -156,13 +161,14 @@ public class PSQLDAO implements IJDBCDAO {
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(SQL_INSERT_NEW_ALIAS);
+			logger.debug("SQL to be run: "+SQL_GET_ALIAS_FROM_DESTINATION+" Param: " + dataObj.getAlias()+" " + dataObj.getCreatorApiKey()+" " +dataObj.getDestination()+" " +dataObj.getIp());
 			stmt.setString(1, dataObj.getAlias());
 			stmt.setString(2, dataObj.getCreatorApiKey());
 			stmt.setString(3, dataObj.getDestination());
 			stmt.setString(4, dataObj.getIp());
 			stmt.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
 		} finally {
 			try {

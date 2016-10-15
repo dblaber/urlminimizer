@@ -5,6 +5,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.exception.ConfigException;
 import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
@@ -12,7 +14,7 @@ import org.da4.urlminimizer.vo.PluginVO;
 import org.da4.urlminimizer.vo.URLVO;
 
 public class UrlMinimizer {
-
+	private static final Logger logger = LogManager.getLogger(UrlMinimizer.class);
 	private Set<IPlugin> preplugins = new LinkedHashSet<IPlugin>();
 	private Set<IPlugin> procplugins = new LinkedHashSet<IPlugin>();
 	private Set<IPlugin> postplugins = new LinkedHashSet<IPlugin>();
@@ -23,33 +25,33 @@ public class UrlMinimizer {
 		IConfig configParser = new XmlConfiguration();
 		try {
 			config = configParser.getConfig(configFile);
-			System.out.println(config);
+			logger.debug(config);
 		} catch (ConfigException e) {
-			e.printStackTrace();
+			logger.fatal("Config error", e);
 		}
 		for (PluginVO plugin : config.getPluginConfigs()) {
 			try {
 				IPlugin pluginImpl = null;
 				if (plugin.getHook() == Hook.PREPROCESSOR) {
-					System.out.println("Loading PREPROCESSOR plugin `" + plugin.getClazz() + "`");
+					logger.info("Loading PREPROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					preplugins.add(pluginImpl);
 				} else if (plugin.getHook() == Hook.POSTPROCESSOR) {
-					System.out.println("Loading POSTPROCESSOR plugin `" + plugin.getClazz() + "`");
+					logger.info("Loading POSTPROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					postplugins.add(pluginImpl);
 				} else if (plugin.getHook() == Hook.PROCESSOR) {
-					System.out.println("Loading PROCESSOR plugin `" + plugin.getClazz() + "`");
+					logger.info("Loading PROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					procplugins.add(pluginImpl);
 				} else {
-					System.err.println("Invalid Hook. Ignoring plugin");
+					logger.error("Invalid Hook. Ignoring plugin");
 					continue;
 				}
 				pluginImpl.init(plugin.getAttributes());
 
 			} catch (ClassNotFoundException e) {
-				System.err.println("ERROR: Can not load plugin ` " + plugin.getClazz()
+				logger.error("ERROR: Can not load plugin ` " + plugin.getClazz()
 						+ "`. Check classpath and that plugin exists");
 				continue;
 			}
@@ -62,6 +64,7 @@ public class UrlMinimizer {
 	}
 
 	public String minimize(String in) {
+		logger.debug("Maximizing " + in);
 		String alias = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		// preprocessing

@@ -3,6 +3,8 @@ package org.da4.urlminimizer.plugins.sql;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.exception.AliasNotFound;
@@ -11,6 +13,7 @@ import org.da4.urlminimizer.plugins.PluginAPI;
 import org.da4.urlminimizer.vo.URLVO;
 
 public class JDBCPersistantStoragePlugin extends PluginAPI {
+	private static final Logger logger = LogManager.getLogger(JDBCPersistantStoragePlugin.class);
 	IJDBCDAO dao = null;
 	final static String RESERVED_ALIASES = "RESERVED_ALIASES";
 
