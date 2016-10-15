@@ -36,7 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.UrlMinimizer;
+import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
+import org.da4.urlminimizer.web.exception.RuntimeUrlWebException;
 import org.da4.urlminimizer.web.vo.Response;
 
 import com.google.gson.Gson;
@@ -66,10 +68,13 @@ public class AjaxMinimize extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("application/json");
 		Gson gson = new Gson();
+		try{
+		response.setContentType("application/json");
 		UrlMinimizer minimizer =  (UrlMinimizer) request.getServletContext().getAttribute("minimizer");
 		String url = request.getParameter("url");
+		if(url == null || url.trim().equals(""))
+			throw new RuntimeUrlException("Empty Url!");
 		logger.debug("Raw Url: " + url);
 		if(!url.toLowerCase().startsWith("http://"))
 			url = "http://" + url;
@@ -86,6 +91,21 @@ public class AjaxMinimize extends HttpServlet {
 		Response resp = new Response(url, mini);
 		logger.trace("JSON Response: " + gson.toJson(resp));
 		response.getWriter().append(gson.toJson(resp));
+		} catch (RuntimeUrlWebException | org.da4.urlminimizer.exception.RuntimeUrlException e)
+		{
+			Response resp = new Response(null, null);
+			resp.setError(e.getMessage());
+			response.getWriter().append(gson.toJson(resp));
+			return;
+		} catch (Exception e)
+		{
+
+			Response resp = new Response(null, null);
+			resp.setError("Unknown Error has occured");
+			response.getWriter().append(gson.toJson(resp));
+			return;
+		}
+		
 	}
 
 	/**

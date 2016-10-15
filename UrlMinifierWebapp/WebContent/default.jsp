@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="https://unpkg.com/blaze">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"
 	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -15,6 +15,11 @@
 		$.getJSON("./AjaxMinimize", {
 			url : url
 		}).done(function(json) {
+			if(json.minifiedUrl == null || json.minifiedUrl == "")
+			{
+				return;
+			}
+			
 			console.log("JSON Data: " + json.minifiedUrl);
 			$('#minifiedUrlArea').html(json.minifiedUrl);
 
@@ -40,13 +45,13 @@ main {
 <body class="c-text">
 
 	<main class="u-center-block">
-	<div class="u-center-block__content"  >
+	<div class="u-center-block__content">
 		<h1 class='c-heading'>ne8.org URL Minimizer</h1>
 		<p1>Short, simple, <a href="https://github.com/dblaber"> Open
 			Source! </a></p1>
 		<form action="#">
-		<div class="o-form-element">
-			<div class="c-input-group c-input-group--stacked">
+			<div class="o-form-element">
+				<div class="c-input-group c-input-group--stacked">
 					<div class="o-field">
 						<input class="c-field" id="urlbox" placeholder="URL to minimize">
 					</div>
@@ -60,6 +65,11 @@ main {
 		<h2 class="c-heading" id="minifiedUrlArea"></h2>
 	</div>
 	<div></div>
+	</main>
+	<main class="u-center-block">
+	<div class="u-center-block__content">
+	Copyright 2016 Darren Blaber
+	</div>
 	</main>
 </body>
 </html>

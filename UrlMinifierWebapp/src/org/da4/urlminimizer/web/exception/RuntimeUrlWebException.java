@@ -20,34 +20,16 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package org.da4.urlminimizer.web.vo;
+package org.da4.urlminimizer.web.exception;
 
-public class Response {
-	private String url;
-	private String minifiedUrl;
-	private String error;
-	public Response(String url, String minifiedUrl) {
-		super();
-		this.url = url;
-		this.minifiedUrl = minifiedUrl;
+public class RuntimeUrlWebException extends RuntimeException {
+	private static final long serialVersionUID = -4583229940988206643L;
+
+	public RuntimeUrlWebException(String msg, Throwable e) {
+		super(msg, e);
 	}
-	public String getUrl() {
-		return url;
+
+	public RuntimeUrlWebException(String msg) {
+		super(msg);
 	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	public String getMinifiedUrl() {
-		return minifiedUrl;
-	}
-	public void setMinifiedUrl(String minifiedUrl) {
-		this.minifiedUrl = minifiedUrl;
-	}
-	public String getError() {
-		return error;
-	}
-	public void setError(String error) {
-		this.error = error;
-	}
-	
 }
