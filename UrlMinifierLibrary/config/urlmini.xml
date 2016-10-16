@@ -1,0 +1,27 @@
+<urlminimizer productName = "Ne8.org Url Minimizer" rootUrl="http://localhost:8080/UrlMinifierWebapp/" >
+
+<!-- Hooks: 
+Preprocessor: Processed before processor, can manimulate the input
+Processor: Processed from top bottom, once one plugin returns a result, others will not be executed 
+Postprocessor: Processed after proccessor
+-->
+<!-- in future, attributes should maybe come from another file -->
+<plugin class="org.da4.urlminimizer.plugins.UrlReservationPlugin" hook="Processor">
+<attribute name='xyz' value='http://google.com' />
+<attribute name='test' value='http://test.com' />
+<attribute name='3g' value='http://test2.com' />
+</plugin>
+
+<plugin class="org.da4.urlminimizer.plugins.sql.JDBCPersistantStoragePlugin" hook="Processor">
+<attribute name='userid' value='webne8' />
+<attribute name='password' value='' />
+<attribute name='url' value='jdbc:postgresql://pi2.patinhas.da4.org:5432/ne8minifier' />
+</plugin>
+
+
+<plugin class="org.da4.urlminimizer.plugins.HashCacheStoragePlugin" hook="Processor,PostProcessor">
+<attribute name='maxcachecount' value='1000' />
+</plugin>
+
+</urlminimizer>
+
