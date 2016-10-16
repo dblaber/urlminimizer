@@ -87,7 +87,11 @@ public class AjaxMinimize extends HttpServlet {
 			logger.debug("Invalid URL!");
 			throw new RuntimeUrlException("Invalid URL");
 		}
-		String mini = minimizer.minimize(url,request.getRemoteAddr(),"WEBGUI");
+		 String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+		   if (ipAddress == null) {  
+		       ipAddress = request.getRemoteAddr();  
+		   }
+		String mini = minimizer.minimize(url,ipAddress,"WEBGUI");
 		logger.debug("Minified URL: " + mini);
 		Response resp = new Response(url, mini);
 		logger.trace("JSON Response: " + gson.toJson(resp));
