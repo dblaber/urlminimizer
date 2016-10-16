@@ -64,11 +64,22 @@ public class Redirector extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try{
 		UrlMinimizer minimizer =  (UrlMinimizer) request.getServletContext().getAttribute("minimizer");
 		logger.debug("Alias Recieved: " + request.getServletPath().substring(1));
 		String url = minimizer.maximize(request.getServletPath().substring(1));
+		if(url == null || url.trim().isEmpty())
+		{
+			response.sendRedirect("/");
+			return;
+		}
 		logger.debug("Maximimized URL: " + url);
 		response.sendRedirect(url);		
+		}
+		catch (Exception e){
+			response.sendRedirect("/");
+			return;
+		}
 	}
 
 	/**
