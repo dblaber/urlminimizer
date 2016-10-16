@@ -34,14 +34,25 @@ import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.da4.urlminimizer.vo.PluginVO;
 import org.da4.urlminimizer.vo.URLVO;
-
+/**
+ * Main class that is entrypoint to the url minimizer library. The main methods to minimize and maximize will
+ * exist here, along with basic skeleton workflow
+ * @author dmb
+ *
+ */
 public class UrlMinimizer {
 	private static final Logger logger = LogManager.getLogger(UrlMinimizer.class);
 	private Set<IPlugin> preplugins = new LinkedHashSet<IPlugin>();
 	private Set<IPlugin> procplugins = new LinkedHashSet<IPlugin>();
 	private Set<IPlugin> postplugins = new LinkedHashSet<IPlugin>();
 	ConfigVO config = null;
-
+	/**
+	 * Constructor to deal with getting config and creating instance of plugins and calling init on plugins
+	 * @param configFile Config file that will be parsed to create ConfigVO object
+	 * @throws InstantiationException Reflection error
+	 * @throws IllegalAccessException Reflection error
+	 * @throws ClassNotFoundException Plugin class can not be found
+	 */
 	public UrlMinimizer(String configFile)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		IConfig configParser = new XmlConfiguration();
@@ -84,11 +95,20 @@ public class UrlMinimizer {
 	public ConfigVO getConfig() {
 		return config;
 	}
-
-	public String minimize(String in) {
+	/**
+	 * Method to minimize a url, minify it, create alias and provide aliased url as result
+	 * @param in Input url to minimize
+	 * @param ip ip address of client requesting we create url
+	 * @param clientKey Client key of client that is requesting url be created
+	 * @return The minimized url for the destination
+	 */
+	public String minimize(String in, String ip, String clientKey) {
 		logger.debug("Maximizing " + in);
 		String alias = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		// store these parameters, as plugins will need them later
+		paramMap.put("IP", ip);
+		paramMap.put("CLIENT_KEY", clientKey);
 		// preprocessing
 		for (IPlugin preplugins : preplugins) {
 			in = (String) preplugins.execute(Hook.PREPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
@@ -108,7 +128,11 @@ public class UrlMinimizer {
 		}
 		return config.getRootUrl() + alias;
 	}
-
+	/**
+	 * Get destination url fron input alias
+	 * @param in Input as alias 
+	 * @return Full destination url 'maximized'
+	 */
 	public String maximize(String in) {
 		String realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();

@@ -24,15 +24,34 @@ package org.da4.urlminimizer.plugins.sql;
 
 import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.vo.URLVO;
-
+/**
+ * DAO Class for SQL relational solutions
+ * @author dmb
+ *
+ */
 public interface IJDBCDAO {
-
+	/**
+	 * Get destination url from database
+	 * @param alias Alias to lookup
+	 * @return Destination that alias resolved to
+	 */
 	URLVO getDestinationUrlFromAlias(String alias);
-
+	/**
+	 * Get next id sequence from db
+	 * @return Next ID
+	 */
 	long getNextId();
-
+/**
+ * Persist urlvo object to the tables that are mapped to it
+ * @param dataObj
+ */
 	void persistUrl(URLVO dataObj);
-
+/**
+ * Resolve alias from destination if it exists
+ * @param destination Destination maximized url
+ * @return URLVO if a matching alias exists
+ * @throws AliasNotFound
+ */
 	URLVO getAliasFromDestination(String destination) throws AliasNotFound;
 
 }

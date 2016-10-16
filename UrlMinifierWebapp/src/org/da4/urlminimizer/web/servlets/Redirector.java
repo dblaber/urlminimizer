@@ -39,6 +39,7 @@ import org.da4.urlminimizer.UrlMinimizer;
 
 /**
  * Servlet implementation class Redirector
+ * This servlet handles all urls that hit root url that don't match a servlet or file
  */
 @WebServlet("/")
 public class Redirector extends HttpServlet {
@@ -67,6 +68,7 @@ public class Redirector extends HttpServlet {
 		try{
 		UrlMinimizer minimizer =  (UrlMinimizer) request.getServletContext().getAttribute("minimizer");
 		logger.debug("Alias Recieved: " + request.getServletPath().substring(1));
+		// remove / in servlet path
 		String url = minimizer.maximize(request.getServletPath().substring(1));
 		if(url == null || url.trim().isEmpty())
 		{

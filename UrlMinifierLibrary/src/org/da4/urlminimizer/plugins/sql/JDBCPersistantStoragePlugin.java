@@ -33,7 +33,11 @@ import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.plugins.PluginAPI;
 import org.da4.urlminimizer.vo.URLVO;
-
+/**
+ * JDBC storage plugin, main plugin to store urls in a relational DB
+ * @author dmb
+ *
+ */
 public class JDBCPersistantStoragePlugin extends PluginAPI {
 	private static final Logger logger = LogManager.getLogger(JDBCPersistantStoragePlugin.class);
 	IJDBCDAO dao = null;
@@ -44,7 +48,11 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 		super.init(params);
 		dao = new PSQLDAO(params.get("url"), params.get("userid"), params.get("password"));
 	}
-
+/**
+ * Check in database to determine whether url exists, if it exists, return it
+ * otherwise, pick from db sequences until one isn't in the reserved list
+ * Persist once open sequence is found
+ */
 	@Override
 	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		super.execute(hook, operation, input, output, params);
@@ -60,13 +68,14 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 				Set<String> reservedSet = (Set<String>) params.get(RESERVED_ALIASES);
 				do {
 					long id = dao.getNextId();
+					// use base 36 to convert id to alias. 
 					alias = Long.toString(id, 36);
 				} while (reservedSet.contains(alias));
 				url = new URLVO();
 				url.setAlias(alias);
-				url.setCreatorApiKey("WEBSITE");
+				url.setCreatorApiKey((String)params.get("CLIENT_KEY"));
 				url.setDestination((String) input);
-				url.setIp("127.0.0.1");
+				url.setIp((String)params.get("IP"));
 				dao.persistUrl(url);
 			}
 			output = url.getAlias();

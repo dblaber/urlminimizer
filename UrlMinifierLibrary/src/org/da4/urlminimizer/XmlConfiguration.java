@@ -37,7 +37,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-
+/**
+ * XML implementation of configuration reader, using JDOM
+ * @author dmb
+ *
+ */
 public class XmlConfiguration implements IConfig {
 	/*
 	 * (non-Javadoc)

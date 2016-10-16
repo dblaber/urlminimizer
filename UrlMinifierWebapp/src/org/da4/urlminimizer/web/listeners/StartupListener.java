@@ -33,6 +33,7 @@ import org.da4.urlminimizer.UrlMinimizer;
 
 /**
  * Application Lifecycle Listener implementation class StartupListener
+ * This is used to startup URL Minimizer library and supply paths
  *
  */
 @WebListener
@@ -52,6 +53,7 @@ public class StartupListener implements ServletContextListener {
     }
 
 	/**
+	 * Called during startup
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent sce)  { 

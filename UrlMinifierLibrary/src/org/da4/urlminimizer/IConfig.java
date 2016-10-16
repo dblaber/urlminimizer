@@ -24,9 +24,18 @@ package org.da4.urlminimizer;
 
 import org.da4.urlminimizer.exception.ConfigException;
 import org.da4.urlminimizer.vo.ConfigVO;
-
+/**
+ * Interface that describes all configuration related methods
+ * @author dmb
+ *
+ */
 public interface IConfig {
-
+/**
+ * Method that must be implemented that will read, parse and populate ConfigVO object
+ * @param filename Filname that will be read and parsed
+ * @return ConfigVO object of parsed config data
+ * @throws ConfigException Any error while reading or parsing config file
+ */
 	ConfigVO getConfig(String filename) throws ConfigException;
 
 }

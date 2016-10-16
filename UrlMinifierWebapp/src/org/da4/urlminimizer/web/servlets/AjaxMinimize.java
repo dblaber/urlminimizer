@@ -44,7 +44,8 @@ import org.da4.urlminimizer.web.vo.Response;
 import com.google.gson.Gson;
 
 /**
- * Servlet implementation class DoMinimize
+ * Servlet implementation class AjaxMinimize
+ * Web class that returns json for minimized url
  */
 @WebServlet("/AjaxMinimize")
 public class AjaxMinimize extends HttpServlet {
@@ -76,17 +77,17 @@ public class AjaxMinimize extends HttpServlet {
 		if(url == null || url.trim().equals(""))
 			throw new RuntimeUrlException("Empty Url!");
 		logger.debug("Raw Url: " + url);
-		if(!url.toLowerCase().startsWith("http://"))
+		if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://"))
 			url = "http://" + url;
 		logger.debug("Converted url: " + url);
 		String protocol = new URL(url).getProtocol();
 		logger.debug("Protocol: " + protocol);
-		if(!(protocol.equals("http") && !protocol.equals("https")))
+		if(!(protocol.equals("http")|| protocol.equals("https")))
 		{
 			logger.debug("Invalid URL!");
 			throw new RuntimeUrlException("Invalid URL");
 		}
-		String mini = minimizer.minimize(url);
+		String mini = minimizer.minimize(url,request.getRemoteAddr(),"WEBGUI");
 		logger.debug("Minified URL: " + mini);
 		Response resp = new Response(url, mini);
 		logger.trace("JSON Response: " + gson.toJson(resp));

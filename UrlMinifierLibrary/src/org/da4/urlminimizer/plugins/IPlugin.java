@@ -26,13 +26,31 @@ import java.util.Map;
 
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
-
+/**
+ * Plugin api. Method plugin must implement to hook into the url minimizer
+ * @author dmb
+ *
+ */
 public interface IPlugin {
-
+	/** Call shortly after plugin is instantiated or after reload.  Startup routines should go here
+	 * 
+	 * @param params Parameters passed during initialization, elements from config file
+	 * can be passed here
+	 */
 	void init(Map<String, String> params);
-
+/**
+ * Main execution of plugin when hook is matched
+ * @param hook Hook into an area of minimizer, currently Preprocessing, Postprocessing or processing
+ * @param operation Operation in which the plugin was called. Could be minimize or maximize
+ * @param input Input parameter to plugin
+ * @param output Ouput object optionally can be supplied
+ * @param params Additional parameters that can be passed to the plugin at runtime
+ * @return An object can be returned from plugin that can be used in workflow of minimization
+ */
 	Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params);
-
+	/**
+	 * Called during termination of the plugin
+	 */
 	void finished();
 
 }

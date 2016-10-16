@@ -73,7 +73,7 @@ public class DoMinimize extends HttpServlet {
 			System.out.println("Invalid URL!");
 		}
 		System.out.println("URL: " + url);
-		String mini = minimizer.minimize(url);
+		String mini = minimizer.minimize(url,request.getRemoteAddr(),"WEBGUI");
 		response.getWriter().append("\nMini Url: " + mini);
 	}
 

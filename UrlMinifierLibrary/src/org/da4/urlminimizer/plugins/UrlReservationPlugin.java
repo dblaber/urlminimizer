@@ -21,7 +21,9 @@
  * under the License.
  *******************************************************************************/
 package org.da4.urlminimizer.plugins;
-
+/**
+ * Reserved hardcoded urls to reserve, as provided from configuration file as attributes
+ */
 import java.util.Map;
 
 import org.da4.urlminimizer.Hook;

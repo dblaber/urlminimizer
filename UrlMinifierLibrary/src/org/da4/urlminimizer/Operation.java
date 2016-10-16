@@ -24,7 +24,12 @@ package org.da4.urlminimizer;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Purpose of Hook is to provide an enumeration of constants for the plugin API to latch to.
+ * The plugin will attach based on the configuration in the XML config file.
+ * @author dmb
+ *
+ */
 public enum Operation {
 
 	MINIMIZE("Minimize"), MAXIMIZE("Maximize");
@@ -39,7 +44,11 @@ public enum Operation {
 	private Operation(String operation) {
 		this.strOperation = operation;
 	}
-
+	/**
+	 * Look up enum value of the string hook
+	 * @param operation Operation to get enum value for
+	 * @return Operation enumeration object
+	 */
 	public static Operation get(String operation) {
 		return operationMap.get(operation);
 	}

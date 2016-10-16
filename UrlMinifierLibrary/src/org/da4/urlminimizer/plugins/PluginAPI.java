@@ -29,7 +29,11 @@ import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.UrlMinimizer;
-
+/**
+ * Abstract class for plugin, mainly used for logging purposes
+ * @author dmb
+ *
+ */
 public class PluginAPI implements IPlugin {
 	private static final Logger logger = LogManager.getLogger(PluginAPI.class);
 	public PluginAPI() {
