@@ -1,39 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
 	<wb-module deploy-name="UrlMinifierWebapp">
-		<wb-resource deploy-path="/" source-path="/WebContent"
-			tag="defaultRootSource" />
-		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src" />
-		<dependent-module archiveName="UrlMinifierLibrary.jar"
-			deploy-path="/WEB-INF/lib" handle="module:/resource/UrlMinifierLibrary/UrlMinifierLibrary">
+		<wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+		<dependent-module archiveName="UrlMinifierLibrary.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/UrlMinifierLibrary/UrlMinifierLibrary">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<dependent-module archiveName="jdom-2.0.6.jar"
-			deploy-path="/WEB-INF/lib"
-			handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/jdom-2.0.6.jar">
+		<dependent-module archiveName="jdom-2.0.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/jdom-2.0.6.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<dependent-module archiveName="log4j-api-2.7.jar"
-			deploy-path="/WEB-INF/lib"
-			handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/log4j-api-2.7.jar">
+		<dependent-module archiveName="log4j-api-2.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/log4j-api-2.7.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<dependent-module archiveName="log4j-core-2.7.jar"
-			deploy-path="/WEB-INF/lib"
-			handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/log4j-core-2.7.jar">
+		<dependent-module archiveName="log4j-core-2.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/log4j-core-2.7.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<dependent-module archiveName="guava-19.0.jar"
-			deploy-path="/WEB-INF/lib"
-			handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/guava-19.0.jar">
+		<dependent-module archiveName="guava-19.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/guava-19.0.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<dependent-module archiveName="postgresql-9.4.1211.jre7.jar"
-			deploy-path="/WEB-INF/lib"
-			handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/postgresql-9.4.1211.jre7.jar">
+		<dependent-module archiveName="postgresql-9.4.1211.jre7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/UrlMinifierLibrary/external_lib/postgresql-9.4.1211.jre7.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<property name="context-root" value="UrlMinifierWebapp" />
-		<property name="java-output-path" value="/UrlMinifierWebapp/build/classes" />
+		<property name="context-root" value="UrlMinifierWebapp"/>
+		<property name="java-output-path" value="/UrlMinifierWebapp/build/classes"/>
 	</wb-module>
 </project-modules>
