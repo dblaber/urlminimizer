@@ -102,13 +102,11 @@ public class UrlMinimizer {
 	 * @param clientKey Client key of client that is requesting url be created
 	 * @return The minimized url for the destination
 	 */
-	public String minimize(String in, String ip, String clientKey) {
+	public String minimize(String in, Map<String,String> clientMetadata) {
 		logger.debug("Maximizing " + in);
 		String alias = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		// store these parameters, as plugins will need them later
-		paramMap.put("IP", ip);
-		paramMap.put("CLIENT_KEY", clientKey);
+		paramMap.put("CLIENT_METADATA",clientMetadata);
 		// preprocessing
 		for (IPlugin preplugins : preplugins) {
 			in = (String) preplugins.execute(Hook.PREPROCESSOR, Operation.MINIMIZE, in, null, paramMap);

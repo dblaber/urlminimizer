@@ -25,6 +25,8 @@ package org.da4.urlminimizer.web.servlets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -36,7 +38,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.UrlMinimizer;
-import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.web.exception.RuntimeUrlWebException;
 import org.da4.urlminimizer.web.vo.Response;
@@ -91,7 +92,11 @@ public class AjaxMinimize extends HttpServlet {
 		   if (ipAddress == null) {  
 		       ipAddress = request.getRemoteAddr();  
 		   }
-		String mini = minimizer.minimize(url,ipAddress,"WEBGUI");
+		Map<String,String> clientMetadata = new HashMap<String,String>();
+		clientMetadata.put("CLIENT_KEY", "WEBGUI");
+		clientMetadata.put("IP", ipAddress);
+		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
+		String mini = minimizer.minimize(url,clientMetadata);
 		logger.debug("Minified URL: " + mini);
 		Response resp = new Response(url, mini);
 		logger.trace("JSON Response: " + gson.toJson(resp));

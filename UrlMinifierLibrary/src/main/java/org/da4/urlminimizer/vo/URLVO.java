@@ -22,6 +22,7 @@
  *******************************************************************************/
 package org.da4.urlminimizer.vo;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +32,23 @@ public class URLVO {
 	private String creatorClass;
 	private String ip;
 	private String creatorApiKey;
+	private String userAgent;
+	private Date timeCreated;
 	boolean isSpam = false;
+	
+	public String getUserAgent() {
+		return userAgent;
+	}
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	public Date getTimeCreated() {
+		return timeCreated;
+	}
+
+	public void setTimeCreated(Date timeCreated) {
+		this.timeCreated = timeCreated;
+	}
 
 	private Map<String, String> metaData = new HashMap<String, String>();
 

@@ -48,11 +48,11 @@ public class TestUrlMinimizer {
 
 	@Test
 	public void testMinimize() {
-		String small = mini.minimize("http://google.com","127.0.0.1","JUNIT Test");
+		String small = mini.minimize("http://google.com",null);
 		System.out.println("small url: " + small);
 		assertEquals(config.getRootUrl() + "xyz", small);
 		for (int i = 0; i < 100; i++) {
-			small = mini.minimize("http://google2.com" + i,"127.0.0.1","JUNIT Test");
+			small = mini.minimize("http://google2.com" + i,null);
 			System.out.println("small url" + i + ": " + small);
 			assertNotNull(small);
 		}

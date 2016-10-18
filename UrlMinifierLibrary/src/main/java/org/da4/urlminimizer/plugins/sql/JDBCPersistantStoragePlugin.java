@@ -22,6 +22,8 @@
  *******************************************************************************/
 package org.da4.urlminimizer.plugins.sql;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,7 +58,10 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 	@Override
 	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		super.execute(hook, operation, input, output, params);
-
+		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");
+		// if null lets just create empty map to avoid null checks later
+		if(clientMetadata == null)
+			clientMetadata = new HashMap<String,String>();
 		if (Operation.MAXIMIZE.equals(operation)) {
 			return dao.getDestinationUrlFromAlias((String) input);
 		} else if (Operation.MINIMIZE.equals(operation)) {
@@ -73,9 +78,11 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 				} while (reservedSet.contains(alias));
 				url = new URLVO();
 				url.setAlias(alias);
-				url.setCreatorApiKey((String)params.get("CLIENT_KEY"));
+				url.setCreatorApiKey((String)clientMetadata.get("CLIENT_KEY"));
 				url.setDestination((String) input);
-				url.setIp((String)params.get("IP"));
+				url.setIp((String)clientMetadata.get("IP"));
+				url.setTimeCreated(new Date());
+				url.setUserAgent(clientMetadata.get("USER_AGENT"));
 				dao.persistUrl(url);
 			}
 			output = url.getAlias();

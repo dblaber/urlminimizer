@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import javax.sql.DataSource;
 
@@ -41,7 +42,7 @@ public class PSQLDAO implements IJDBCDAO {
 	final static String SQL_GET_DESTINATION_FROM_ALIAS = "select * from minifier.minimized_urls where minified_alias = ?";
 	final static String SQL_GET_ALIAS_FROM_DESTINATION = "select * from minifier.minimized_urls where destination_url = ?";
 
-	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip) values (?,?,?,?) ";
+	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip,user_agent,created_ts) values (?,?,?,?,?,?) ";
 
 	final static String SQL_GET_NEXT_ID = "select nextval('minifier.alias_seq')";
 	DataSource ds = null;
@@ -121,6 +122,8 @@ public class PSQLDAO implements IJDBCDAO {
 			vo.setCreatorApiKey(rs.getString("creation_api_key"));
 			vo.setDestination("destination_url");
 			vo.setIp(rs.getString("source_ip"));
+			vo.setTimeCreated(rs.getTimestamp("created_ts"));
+			vo.setUserAgent(rs.getString("user_agent"));
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
@@ -188,6 +191,8 @@ public class PSQLDAO implements IJDBCDAO {
 			stmt.setString(2, dataObj.getCreatorApiKey());
 			stmt.setString(3, dataObj.getDestination());
 			stmt.setString(4, dataObj.getIp());
+			stmt.setString(5, dataObj.getUserAgent());
+			stmt.setTimestamp(6, new Timestamp(dataObj.getTimeCreated().getTime()));
 			stmt.execute();
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
