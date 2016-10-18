@@ -15,5 +15,6 @@ include 'shared'
 include 'api'
 include 'services:webservice'
 */
-
+include 'UrlMinifierLibrary'
+include 'UrlMinifierWebapp'
 rootProject.name = 'urlminimizer'
