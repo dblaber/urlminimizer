@@ -68,7 +68,7 @@ main {
 	</main>
 	<main class="u-center-block">
 	<div class="u-center-block__content">
-	Copyright 2016 Darren Blaber
+	<p>Copyright 2016 Darren Blaber.</p><p> Abuse Contact: abuse@ne8.org</p>
 	</div>
 	</main>
 </body>

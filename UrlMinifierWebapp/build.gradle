@@ -13,7 +13,7 @@ apply plugin: 'war'
 apply plugin: 'eclipse'
 
 sourceCompatibility = 1.7
-
+project.webAppDirName = 'WebContent'
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -35,4 +35,5 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     //testCompile 'junit:junit:3.8.2'
     providedCompile "javax.servlet:javax.servlet-api:3.0.1"
+    
 }
