@@ -6,10 +6,12 @@ This is the source code behind http://ne8.org. This is plugin-based modular java
 #Build instructions
 - Kick off gradle build to build war
 - Project can be directly imported into eclipse, and war can be exported
+
 #Install Instructions
 - Build application (use eclipse for now, gradle still WIP)
 - Set up postgres database (Many tutorials exist, choose one applicable to your distribution, configure securely)
 - Run DDL's
+
 ##Debian+tomcat Instructions
 - install apache2, mod_proxy
 - debian: apt-get install apache2 libapache2-mod-jk
