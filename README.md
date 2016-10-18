@@ -39,6 +39,5 @@ JAVA_OPTS="-Djava.awt.headless=true -Xmx512m -XX:+UseConcMarkSweepGC -DCONFIG_XM
 - Configure apache to rewrite url from / to web app context root. 
 
 #TODO
-* Fully support gradle build system to build library and war
 * Memory Caching plugin (common used aliases should be stored in memory)
 * UI Improvements
