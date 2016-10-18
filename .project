@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>UrlMinifierLibrary</name>
-	<comment>Project UrlMinifierLibrary created by Buildship.</comment>
+	<name>urlminimizer</name>
+	<comment>Project urlminimizer created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
