@@ -4,8 +4,8 @@ ne8.org URL minimizer
 This is the source code behind http://ne8.org. This is plugin-based modular javaee application, very configuration and made for expansion. It will build into a war that can be deployed to any application server. 
 
 #Build instructions
-- Kick off gradle build to build war
-- Project can be directly imported into eclipse, and war can be exported
+- Kick off gradle build to build war (./gradelew build on unix)
+- War will be in <GIT DIRECTORY>/UrlMinifierWebapp/build/libs
 
 #Install Instructions
 - Build application (use eclipse for now, gradle still WIP)
