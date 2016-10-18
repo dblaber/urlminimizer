@@ -5,12 +5,12 @@ This is the source code behind http://ne8.org. This is plugin-based modular java
 
 #Build instructions
 - Kick off gradle build to build war (./gradelew build on unix)
-- War will be in <GIT DIRECTORY>/UrlMinifierWebapp/build/libs
+- War will be in <SOURCE>/UrlMinifierWebapp/build/libs
 
 #Install Instructions
 - Build application (use eclipse for now, gradle still WIP)
 - Set up postgres database (Many tutorials exist, choose one applicable to your distribution, configure securely)
-- Run DDL's
+- Run DDL's (in <SOURCE>/DDL/UrlMinifierV1.sql) in the  local database.
 
 ##Debian+tomcat Instructions
 - install apache2, mod_proxy
@@ -28,7 +28,7 @@ This is the source code behind http://ne8.org. This is plugin-based modular java
     -->
 ```
 - Restart Apache
-- Place property files, edit where needed
+- Place config files(<SOURCE>/config/), edit where needed
 - Deploy war in tomcat
 - Copy urlmini.xml and log4j.xml onto filesystem (in this example, 
 - Modify /etc/default/tomcat8 to include location to configuration, see example, these files will go in /etc/minimizer/
