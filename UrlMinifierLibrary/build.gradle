@@ -10,6 +10,7 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apple plugin 'eclipse-wtp'
 
 sourceCompatibility = 1.7
 
