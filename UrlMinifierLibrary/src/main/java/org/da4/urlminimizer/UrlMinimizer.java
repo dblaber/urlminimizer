@@ -65,20 +65,20 @@ public class UrlMinimizer {
 		for (PluginVO plugin : config.getPluginConfigs()) {
 			try {
 				IPlugin pluginImpl = null;
-				if (plugin.getHook() == Hook.PREPROCESSOR) {
+				if (plugin.getHooks().contains(Hook.PREPROCESSOR)) {
 					logger.info("Loading PREPROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					preplugins.add(pluginImpl);
-				} else if (plugin.getHook() == Hook.POSTPROCESSOR) {
+				} else if (plugin.getHooks().contains(Hook.POSTPROCESSOR)) {
 					logger.info("Loading POSTPROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					postplugins.add(pluginImpl);
-				} else if (plugin.getHook() == Hook.PROCESSOR) {
+				} else if (plugin.getHooks().contains(Hook.PROCESSOR)) {
 					logger.info("Loading PROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					procplugins.add(pluginImpl);
 				} else {
-					logger.error("Invalid Hook. Ignoring plugin");
+					logger.error("Invalid Hook. Ignoring plugin. Hooks: " + plugin.getHooks());
 					continue;
 				}
 				pluginImpl.init(plugin.getAttributes());

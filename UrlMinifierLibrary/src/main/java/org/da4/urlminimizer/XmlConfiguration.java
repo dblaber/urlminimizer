@@ -77,8 +77,18 @@ public class XmlConfiguration implements IConfig {
 		List<PluginVO> pluginVos = new ArrayList<PluginVO>();
 		List<Element> xmlPluginList = rootElement.getChildren("plugin");
 		for (Element xmlPlugin : xmlPluginList) {
+			String hooksRaw = xmlPlugin.getAttributeValue("hook");
+			List<Hook> hooks = new ArrayList<Hook>();
+			if(!"".equalsIgnoreCase(hooksRaw.trim()))
+			{
+				String[] hooksSplit = hooksRaw.split(",");
+				for(String hook:hooksSplit)
+				{
+					hooks.add(Hook.get(hook));
+				}
+			}
 			PluginVO pluginVo = new PluginVO(xmlPlugin.getAttributeValue("class"),
-					Hook.get(xmlPlugin.getAttributeValue("hook")));
+					hooks);
 			Map<String, String> attribMap = new LinkedHashMap<String, String>();
 			List<Element> xmlPluginAttribs = xmlPlugin.getChildren("attribute");
 			for (Element xmlAttribute : xmlPluginAttribs) {

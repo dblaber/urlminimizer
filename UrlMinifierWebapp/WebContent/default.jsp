@@ -14,10 +14,10 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script type="text/javascript">
 	function sendBigUrl(url) {
-		$.getJSON("./AjaxMinimize", {
+		$.getJSON("AjaxMinimize", {
 			url : url
 		}).done(function(json) {
-			if(json.minifiedUrl == null || json.minifiedUrl == "")
+			if(json == null || json.minifiedUrl == null || json.minifiedUrl == "")
 			{
 				return;
 			}
@@ -29,12 +29,21 @@
 			var err = textStatus + ", " + error;
 			console.log("Request Failed: " + err);
 		});
+		return true;
 	}
-	
-	 $('#urlbox').on('keypress', function (e) {
-         if(e.which === 13){
-        	 sendBigUrl($('#urlbox').val())
-         }
+	$( document ).ready(function() {
+		$('#urlbox').on('keypress', function (e) {
+			 //e.preventDefault();
+	         if(e.which === 13){
+	        	 sendBigUrl($('#urlbox').val())
+	         }
+	});
+	 
+         
+     $("#minimize_form").on("submit", function(e){
+        	// e.preventDefault();
+        	alert(e)
+        	})
    });
 </script>
 <style type="text/css">
@@ -42,8 +51,12 @@ body {
 	background-color: #f7f7f7;
 }
 
-main {
+#main {
 	height: 480px;
+}
+#footer{
+	height: 480px;
+	width: 500px;
 }
 </style>
 
@@ -52,16 +65,15 @@ main {
 </head>
 <body class="c-text">
 
-	<main class="u-center-block">
+	<div id="main" class="u-center-block">
 	<div class="u-center-block__content">
 		<h1 class='c-heading'>ne8.org URL Minimizer</h1>
-		<p1>Short, simple, <a href="https://github.com/dblaber/urlminimizer"> Open
-			Source! </a></p1>
-		<form action="#">
+		<p>Short, simple, <a href="https://github.com/dblaber/urlminimizer"> Open
+			Source! </a></p>
 			<div class="o-form-element">
 				<div class="c-input-group c-input-group--stacked">
 					<div class="o-field">
-						<input class="c-field" id="urlbox" placeholder="URL to minimize" onpress>
+						<input class="c-field" id="urlbox" placeholder="URL to minimize">
 					</div>
 				</div>
 				<div class="o-form-element">
@@ -69,15 +81,16 @@ main {
 						onclick="sendBigUrl($('#urlbox').val())"> Minimize </button>
 				</div>
 			</div>
-		</form>
+
 		<h2 class="c-heading" id="minifiedUrlArea"></h2>
 	</div>
 	<div></div>
-	</main>
-	<main class="u-center-block">
-	<div class="u-center-block__content">
+	</div>
+	<div id="footer" class="u-center-block__content u-center-block__content--horizontal">
+	<div  class="u-center-block__content">
 	<p>Copyright 2016 Darren Blaber.</p><p> Abuse Contact: abuse@ne8.org</p>
 	</div>
-	</main>
+	</div>
+
 </body>
 </html>

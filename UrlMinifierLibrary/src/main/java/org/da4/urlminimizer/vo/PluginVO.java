@@ -22,20 +22,29 @@
  *******************************************************************************/
 package org.da4.urlminimizer.vo;
 
+import java.util.List;
 import java.util.Map;
 
 import org.da4.urlminimizer.Hook;
 
 public class PluginVO {
 	String clazz;
+	List<Hook> hooks;
 
-	public PluginVO(String clazz, Hook hook) {
+	public PluginVO(String clazz, List<Hook> hooks) {
 		super();
 		this.clazz = clazz;
-		this.hook = hook;
+		this.hooks = hooks;
 	}
 
-	Hook hook;
+	public List<Hook> getHooks() {
+		return hooks;
+	}
+
+	public void setHooks(List<Hook> hooks) {
+		this.hooks = hooks;
+	}
+
 	Map<String, String> attributes;
 
 	public String getClazz() {
@@ -46,13 +55,6 @@ public class PluginVO {
 		this.clazz = clazz;
 	}
 
-	public Hook getHook() {
-		return hook;
-	}
-
-	public void setHook(Hook hook) {
-		this.hook = hook;
-	}
 
 	public Map<String, String> getAttributes() {
 		return attributes;
@@ -64,7 +66,7 @@ public class PluginVO {
 
 	@Override
 	public String toString() {
-		return "PluginVO [clazz=" + clazz + ", hook=" + hook + ", attributes=" + attributes + "]";
+		return "PluginVO [clazz=" + clazz + ", hooks=" + hooks + ", attributes=" + attributes + "]";
 	}
 
 }
