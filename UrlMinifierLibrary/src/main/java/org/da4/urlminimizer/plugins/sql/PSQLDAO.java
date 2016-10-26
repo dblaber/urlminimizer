@@ -27,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -43,7 +44,9 @@ public class PSQLDAO implements IJDBCDAO {
 	final static String SQL_GET_ALIAS_FROM_DESTINATION = "select * from minifier.minimized_urls where destination_url = ?";
 
 	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip,user_agent,created_ts) values (?,?,?,?,?,?) ";
-
+	final static String SQL_INSERT_NEW_ALIAS_STATS = "insert into minifier.stats_clicks (minified_alias,click_cnt,last_clicked_ts) values (?,?,?) ";
+	final static String SQL_INSERT_NEW_STATS_LOG = "insert into minifier.stats_click_log (minified_alias,source_ip,user_agent,click_ts, referrer) values (?,?,?,?,?) ";
+	final static String SQL_UPDATE_CLICK_STATS = "UPDATE minifier.stats_clicks set click_cnt = (click_cnt + 1) and last_clicked_ts  = ? where minified_alias = ?";
 	final static String SQL_GET_NEXT_ID = "select nextval('minifier.alias_seq')";
 	DataSource ds = null;
 
@@ -205,4 +208,76 @@ public class PSQLDAO implements IJDBCDAO {
 			}
 		}
 	}
+	
+	public void insertNewClicksCount(String alias, Date date)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(SQL_INSERT_NEW_ALIAS_STATS);
+			logger.debug("SQL to be run: "+SQL_INSERT_NEW_ALIAS_STATS+" Param: " + alias + ", " + 0 + ", " + date);
+			stmt.setString(1, alias);
+			stmt.setLong(2, 0);
+			stmt.setTimestamp(3, new Timestamp(date.getTime()));
+		}catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	public void insertStatsLog(String alias, String ip, String useragent, String referrer, Date date)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			//minified_alias,source_ip,user_agent,click_ts, referrer
+			stmt = conn.prepareStatement(SQL_INSERT_NEW_STATS_LOG);
+			logger.debug("SQL to be run: "+SQL_INSERT_NEW_STATS_LOG+" Param: " + alias + ", " + ip + ", " + useragent + ", " + date + ", " + referrer);
+			stmt.setString(1, alias);
+			stmt.setString(2, ip);
+			stmt.setString(3, useragent);
+			stmt.setTimestamp(4, new Timestamp(date.getTime()));
+			stmt.setString(5, referrer);
+		}catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	
+	public void incrementClickCount(String alias, Date date)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(SQL_INSERT_NEW_ALIAS_STATS);
+			logger.debug("SQL to be run: "+SQL_INSERT_NEW_ALIAS_STATS+" Param: " + date + ", " + 0 + ", " + alias);
+			stmt.setTimestamp(1, new Timestamp(date.getTime()));
+			stmt.setString(2, alias);
+		}catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	
+	
 }
