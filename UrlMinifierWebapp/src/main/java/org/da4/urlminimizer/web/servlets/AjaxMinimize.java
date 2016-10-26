@@ -48,7 +48,7 @@ import com.google.gson.Gson;
  * Servlet implementation class AjaxMinimize
  * Web class that returns json for minimized url
  */
-@WebServlet("/AjaxMinimize")
+@WebServlet("/AjaxMinimize.do")
 public class AjaxMinimize extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LogManager.getLogger(AjaxMinimize.class);

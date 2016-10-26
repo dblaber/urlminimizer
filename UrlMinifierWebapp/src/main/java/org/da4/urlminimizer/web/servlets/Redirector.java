@@ -41,7 +41,7 @@ import org.da4.urlminimizer.UrlMinimizer;
  * Servlet implementation class Redirector
  * This servlet handles all urls that hit root url that don't match a servlet or file
  */
-@WebServlet("/")
+@WebServlet("/Redirector.do")
 public class Redirector extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LogManager.getLogger(Redirector.class);
@@ -65,13 +65,21 @@ public class Redirector extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// get request url that was placed from the filter
+		String reqUrl = (String) request.getServletContext().getAttribute("URL_ALIAS");
+		if(reqUrl == null || reqUrl.trim().isEmpty())
+		{
+			response.sendRedirect("/");
+			return;
+		}
 		try{
 		UrlMinimizer minimizer =  (UrlMinimizer) request.getServletContext().getAttribute("minimizer");
-		logger.debug("Alias Recieved: " + request.getServletPath().substring(1));
+		logger.debug("Alias Recieved: " + reqUrl);
 		// remove / in servlet path
-		String url = minimizer.maximize(request.getServletPath().substring(1));
+		String url = minimizer.maximize(reqUrl);
 		if(url == null || url.trim().isEmpty())
 		{
+			logger.debug("Unknown alias:" +reqUrl);
 			response.sendRedirect("/");
 			return;
 		}
@@ -79,6 +87,7 @@ public class Redirector extends HttpServlet {
 		response.sendRedirect(url);		
 		}
 		catch (Exception e){
+			logger.error("Exception",e);
 			response.sendRedirect("/");
 			return;
 		}

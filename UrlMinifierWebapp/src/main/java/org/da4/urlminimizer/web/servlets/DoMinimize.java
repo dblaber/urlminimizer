@@ -38,7 +38,7 @@ import org.da4.urlminimizer.UrlMinimizer;
 /**
  * Servlet implementation class DoMinimize
  */
-@WebServlet("/DoMinimize")
+@WebServlet("/Minimize.do")
 public class DoMinimize extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
