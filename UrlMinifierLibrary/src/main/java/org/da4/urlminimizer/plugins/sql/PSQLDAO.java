@@ -208,7 +208,14 @@ public class PSQLDAO implements IJDBCDAO {
 			}
 		}
 	}
-	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.da4.urlminimizer.plugins.IJDBCDAO#insertNewClicksCount(org.da4.urlminimizer.vo.
+	 * URLVO)
+	 */
+	@Override
 	public void insertNewClicksCount(String alias, Date date)
 	{
 		PreparedStatement stmt = null;
@@ -231,6 +238,14 @@ public class PSQLDAO implements IJDBCDAO {
 			}
 		}
 	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.da4.urlminimizer.plugins.IJDBCDAO#insertStatsLog(org.da4.urlminimizer.vo.
+	 * URLVO)
+	 */
+	@Override
 	public void insertStatsLog(String alias, String ip, String useragent, String referrer, Date date)
 	{
 		PreparedStatement stmt = null;
@@ -256,7 +271,14 @@ public class PSQLDAO implements IJDBCDAO {
 			}
 		}
 	}
-	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.da4.urlminimizer.plugins.IJDBCDAO#incrementClickCount(org.da4.urlminimizer.vo.
+	 * URLVO)
+	 */
+	@Override
 	public void incrementClickCount(String alias, Date date)
 	{
 		PreparedStatement stmt = null;

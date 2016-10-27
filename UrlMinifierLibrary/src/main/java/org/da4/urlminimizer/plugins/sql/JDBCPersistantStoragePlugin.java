@@ -58,6 +58,7 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 	@Override
 	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		super.execute(hook, operation, input, output, params);
+		boolean urlCreated = false;
 		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");
 		// if null lets just create empty map to avoid null checks later
 		if(clientMetadata == null)
@@ -84,6 +85,8 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 				url.setTimeCreated(new Date());
 				url.setUserAgent(clientMetadata.get("USER_AGENT"));
 				dao.persistUrl(url);
+				urlCreated = true;
+				params.put("URL_CREATED",true);
 			}
 			output = url.getAlias();
 			return url.getAlias();
