@@ -24,6 +24,9 @@ package org.da4.urlminimizer.junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.HashMap;
+
 import org.da4.urlminimizer.UrlMinimizer;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.junit.Before;
@@ -60,11 +63,11 @@ public class TestUrlMinimizer {
 
 	@Test
 	public void testMaximize() {
-		String small = mini.maximize("xyz");
+		String small = mini.maximize("xyz", new HashMap<String,String>());
 		System.out.println("big url: " + small);
 		assertEquals("http://google.com", small);
 
-		small = mini.maximize("68");
+		small = mini.maximize("68", new HashMap<String,String>());
 		System.out.println("big url2: " + small);
 		assertNotNull(small);
 	}
