@@ -46,7 +46,7 @@ public class PSQLDAO implements IJDBCDAO {
 	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip,user_agent,created_ts,referrer) values (?,?,?,?,?,?,?) ";
 	final static String SQL_INSERT_NEW_ALIAS_STATS = "insert into minifier.stats_clicks (minified_alias,click_cnt,last_clicked_ts) values (?,?,?) ";
 	final static String SQL_INSERT_NEW_STATS_LOG = "insert into minifier.stats_click_log (minified_alias,source_ip,user_agent,click_ts, referrer) values (?,?,?,?,?) ";
-	final static String SQL_UPDATE_CLICK_STATS = "UPDATE minifier.stats_clicks set click_cnt = (click_cnt + 1) and last_clicked_ts  = ? where minified_alias = ?";
+	final static String SQL_UPDATE_CLICK_STATS = "UPDATE minifier.stats_clicks set click_cnt = (click_cnt + 1),last_clicked_ts  = ? where minified_alias = ?";
 	final static String SQL_GET_NEXT_ID = "select nextval('minifier.alias_seq')";
 	static DataSource ds = null;
 
@@ -233,6 +233,7 @@ public class PSQLDAO implements IJDBCDAO {
 			stmt.setString(1, alias);
 			stmt.setLong(2, 0);
 			stmt.setTimestamp(3, new Timestamp(date.getTime()));
+			stmt.execute();
 		}catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
@@ -266,6 +267,7 @@ public class PSQLDAO implements IJDBCDAO {
 			stmt.setString(3, useragent);
 			stmt.setTimestamp(4, new Timestamp(date.getTime()));
 			stmt.setString(5, referrer);
+			stmt.execute();
 		}catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
@@ -291,10 +293,11 @@ public class PSQLDAO implements IJDBCDAO {
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
-			stmt = conn.prepareStatement(SQL_INSERT_NEW_ALIAS_STATS);
-			logger.debug("SQL to be run: "+SQL_INSERT_NEW_ALIAS_STATS+" Param: " + date + ", " + 0 + ", " + alias);
+			stmt = conn.prepareStatement(SQL_UPDATE_CLICK_STATS);
+			logger.debug("SQL to be run: "+SQL_UPDATE_CLICK_STATS+" Param: " + date + ", " + 0 + ", " + alias);
 			stmt.setTimestamp(1, new Timestamp(date.getTime()));
 			stmt.setString(2, alias);
+			stmt.execute();
 		}catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);

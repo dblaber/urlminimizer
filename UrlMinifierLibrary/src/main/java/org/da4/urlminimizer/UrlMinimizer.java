@@ -116,13 +116,14 @@ public class UrlMinimizer {
 		// processing
 		for (IPlugin plugin : procplugins) {
 			alias = (String) plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+			paramMap.put("ALIAS", alias);
 			if (alias != null)
 				break;
 		}
 
 		// POSTPROCESSOR
-		for (IPlugin preplugins : preplugins) {
-			alias = (String) preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+		for (IPlugin preplugins : postplugins) {
+			preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 		}
 		return config.getRootUrl() + alias;
 	}
@@ -153,7 +154,7 @@ public class UrlMinimizer {
 
 		// POSTPROCESSOR
 		for (IPlugin plugin : postplugins) {
-			realUrl = (String) plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+			plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
 		return realUrl;
 	}

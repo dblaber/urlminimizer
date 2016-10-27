@@ -25,7 +25,8 @@ package org.da4.urlminimizer.plugins;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -38,16 +39,17 @@ import org.da4.urlminimizer.plugins.sql.IJDBCDAO;
 import org.da4.urlminimizer.plugins.sql.PSQLDAO;
 
 public class NonBlockingStatsPlugin extends PluginAPI {
-	private ConcurrentLinkedQueue<StatsRequestVO> statQueue = null;
+	private BlockingQueue<StatsRequestVO> statQueue = null;
 	private static final Logger logger = LogManager.getLogger(NonBlockingStatsPlugin.class);
 	private IJDBCDAO dao = null;
 	private ExecutorService executor = null;
+	final static String RESERVED_ALIASES = "RESERVED_ALIASES";
 	class WorkerThread implements Runnable
 	{
 		private int threadId;
-		private LinkedBlockingQueue<StatsRequestVO> statQueue;
+		private BlockingQueue<StatsRequestVO> statQueue;
 		private IJDBCDAO dao = null;
-		public WorkerThread(int threadId,LinkedBlockingQueue<StatsRequestVO> statQueue, IJDBCDAO dao) {
+		public WorkerThread(int threadId,BlockingQueue<StatsRequestVO> statQueue, IJDBCDAO dao) {
 			this.threadId = threadId;
 			this.statQueue = statQueue;
 			this.dao = dao;
@@ -62,7 +64,11 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 					StatsRequestVO statsReq = statQueue.take();
 					logger.debug("Stats thread awakens!");
 					//determine if its url creation, because then we will only insert click column
-					dao.insertNewClicksCount(statsReq.getAlias(), new Date());
+					if(statsReq.isNewUrl())
+					{
+						dao.insertNewClicksCount(statsReq.getAlias(), new Date());
+						continue;
+					}
 					// first log
 					logger.debug("Updating stats for alias" + statsReq.getAlias());
 					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(), statsReq.getReferrer(), new Date());
@@ -85,7 +91,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 	public void init(Map<String, String> params) {
 		super.init(params);
 		dao = new PSQLDAO(params.get("url"), params.get("userid"), params.get("password"));
-		LinkedBlockingQueue<StatsRequestVO> statQueue = new LinkedBlockingQueue<StatsRequestVO>();
+		statQueue = new LinkedBlockingQueue<StatsRequestVO>();
 		int workerCount = 4;
 		if(params.get("WorkerCount") != null)
 			workerCount = Integer.parseInt(params.get("WorkerCount"));
@@ -105,6 +111,10 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 		// if null lets just create empty map to avoid null checks later
 		if(clientMetadata == null)
 			clientMetadata = new HashMap<String,String>();
+		Set<String> reservedSet = (Set<String>) params.get(RESERVED_ALIASES);
+		if(reservedSet.contains(input))
+			return input;
+		
 		//only handle maximize for now
 		if(operation.equals(Operation.MAXIMIZE))
 		{
@@ -116,7 +126,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 		{
 			if(params.get("URL_CREATED") != null && ((boolean)params.get("URL_CREATED")) == true)
 			{
-				StatsRequestVO vo = new StatsRequestVO((String)input,null,null,null,true);
+				StatsRequestVO vo = new StatsRequestVO((String)params.get("ALIAS"),null,null,null,true);
 				statQueue.add(vo);
 			}
 		}
