@@ -82,6 +82,7 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 				url.setCreatorApiKey((String)clientMetadata.get("CLIENT_KEY"));
 				url.setDestination((String) input);
 				url.setIp((String)clientMetadata.get("IP"));
+				url.setReferrer((String)clientMetadata.get("REFERRER"));
 				url.setTimeCreated(new Date());
 				url.setUserAgent(clientMetadata.get("USER_AGENT"));
 				dao.persistUrl(url);

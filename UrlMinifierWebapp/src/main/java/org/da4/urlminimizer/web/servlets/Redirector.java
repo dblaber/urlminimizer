@@ -24,6 +24,8 @@ package org.da4.urlminimizer.web.servlets;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -75,8 +77,19 @@ public class Redirector extends HttpServlet {
 		try{
 		UrlMinimizer minimizer =  (UrlMinimizer) request.getServletContext().getAttribute("minimizer");
 		logger.debug("Alias Recieved: " + reqUrl);
+		
+	   String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+	   if (ipAddress == null) {  
+	       ipAddress = request.getRemoteAddr();  
+	   }
+		Map<String,String> clientMetadata = new HashMap<String,String>();
+		clientMetadata.put("REFFERER", request.getHeader("referer"));
+		clientMetadata.put("IP", ipAddress);
+		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
+		
+		
 		// remove / in servlet path
-		String url = minimizer.maximize(reqUrl);
+		String url = minimizer.maximize(reqUrl,clientMetadata);
 		if(url == null || url.trim().isEmpty())
 		{
 			logger.debug("Unknown alias:" +reqUrl);

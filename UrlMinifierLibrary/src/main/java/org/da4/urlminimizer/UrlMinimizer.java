@@ -131,9 +131,10 @@ public class UrlMinimizer {
 	 * @param in Input as alias 
 	 * @return Full destination url 'maximized'
 	 */
-	public String maximize(String in) {
+	public String maximize(String in,Map<String,String> clientMetadata) {
 		String realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("CLIENT_METADATA",clientMetadata);
 		// preprocessing
 		for (IPlugin plugin : preplugins) {
 			in = (String) plugin.execute(Hook.PREPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
