@@ -20,7 +20,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package org.da4.urlminimizer.web;
+package org.da4.urlminimizer.web.filters;
 
 import java.io.IOException;
 
@@ -70,7 +70,7 @@ public class AliasFilter implements Filter {
 			chain.doFilter(request, response);
 			return;
 		}
-		request.getServletContext().setAttribute("URL_ALIAS", reqUrl);
+		request.setAttribute("URL_ALIAS", reqUrl);
 	    request.getRequestDispatcher("/Redirector.do").forward(request, response);
 	    
 	}

@@ -68,7 +68,7 @@ public class Redirector extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get request url that was placed from the filter
-		String reqUrl = (String) request.getServletContext().getAttribute("URL_ALIAS");
+		String reqUrl = (String) request.getAttribute("URL_ALIAS");
 		if(reqUrl == null || reqUrl.trim().isEmpty())
 		{
 			response.sendRedirect("/");

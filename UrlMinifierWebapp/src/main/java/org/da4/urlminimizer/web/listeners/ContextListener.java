@@ -37,12 +37,12 @@ import org.da4.urlminimizer.UrlMinimizer;
  *
  */
 @WebListener
-public class StartupListener implements ServletContextListener {
-	private static final Logger logger = LogManager.getLogger(StartupListener.class);
+public class ContextListener implements ServletContextListener {
+	private static final Logger logger = LogManager.getLogger(ContextListener.class);
     /**
      * Default constructor. 
      */
-    public StartupListener() {
+    public ContextListener() {
         // TODO Auto-generated constructor stub
     }
 
@@ -50,6 +50,9 @@ public class StartupListener implements ServletContextListener {
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
     public void contextDestroyed(ServletContextEvent sce)  { 
+    	logger.info("Shutting down Application...");
+    	UrlMinimizer minimizer = (UrlMinimizer) sce.getServletContext().getAttribute("minimizer");
+    	minimizer.shutdown();
     }
 
 	/**

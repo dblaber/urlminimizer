@@ -41,6 +41,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 	private ConcurrentLinkedQueue<StatsRequestVO> statQueue = null;
 	private static final Logger logger = LogManager.getLogger(NonBlockingStatsPlugin.class);
 	private IJDBCDAO dao = null;
+	private ExecutorService executor = null;
 	class WorkerThread implements Runnable
 	{
 		private int threadId;
@@ -51,21 +52,29 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 			this.statQueue = statQueue;
 			this.dao = dao;
 		}
-		
 		@Override
 		public void run() {
 			Thread.currentThread().setName("Minimizer_Stats_thread_" + threadId);
+
 			try {
-				StatsRequestVO statsReq = statQueue.take();
-				logger.debug("Stats thread awakens!");
-				//determine if its url creation, because then we will only insert click column
-				dao.insertNewClicksCount(statsReq.getAlias(), new Date());
-				// first log
-				logger.debug("Updating stats for alias" + statsReq.getAlias());
-				dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(), statsReq.getReferrer(), new Date());
-				dao.incrementClickCount(statsReq.getAlias(), new Date());
+				while(!Thread.currentThread().isInterrupted())
+				{
+					StatsRequestVO statsReq = statQueue.take();
+					logger.debug("Stats thread awakens!");
+					//determine if its url creation, because then we will only insert click column
+					dao.insertNewClicksCount(statsReq.getAlias(), new Date());
+					// first log
+					logger.debug("Updating stats for alias" + statsReq.getAlias());
+					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(), statsReq.getReferrer(), new Date());
+					dao.incrementClickCount(statsReq.getAlias(), new Date());
+				}
 				
-			} catch (Exception e) {
+			}catch (InterruptedException e) 
+			{
+				logger.error("Thread interrupted!",e);
+				Thread.currentThread().interrupt();
+			}
+			catch (Exception e) {
 				logger.error("Worker thread Exception",e);
 			}
 			
@@ -80,7 +89,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 		int workerCount = 4;
 		if(params.get("WorkerCount") != null)
 			workerCount = Integer.parseInt(params.get("WorkerCount"));
-		ExecutorService executor = Executors.newFixedThreadPool(workerCount);
+		executor = Executors.newFixedThreadPool(workerCount);
 		//set up worker threads
 		for(int i=0; i < workerCount; i++)
 		{
@@ -91,6 +100,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 
 	@Override
 	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+		super.execute(hook, operation, input,output, params);
 		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");
 		// if null lets just create empty map to avoid null checks later
 		if(clientMetadata == null)
@@ -111,5 +121,10 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 			}
 		}
 		return input;
+	}
+	@Override
+	public void finished() {
+		super.finished();
+		executor.shutdownNow();
 	}
 }

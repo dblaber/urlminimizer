@@ -152,10 +152,31 @@ public class UrlMinimizer {
 		}
 
 		// POSTPROCESSOR
-		for (IPlugin plugin : preplugins) {
+		for (IPlugin plugin : postplugins) {
 			realUrl = (String) plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
 		return realUrl;
+	}
+	/**
+	 * Shutdown the plugin system. Call when a long running container needs to
+	 * shutdown, for example a j2ee container
+	 */
+	public void shutdown()
+	{
+		logger.info("Shutting down minimizer...");
+		for (IPlugin plugin : preplugins) {
+			plugin.finished();
+		}
+
+		// processing
+		for (IPlugin plugin : procplugins) {
+			plugin.finished();
+		}
+
+		// POSTPROCESSOR
+		for (IPlugin plugin : postplugins) {
+			plugin.finished();
+		}
 	}
 
 }

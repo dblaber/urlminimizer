@@ -48,21 +48,24 @@ public class PSQLDAO implements IJDBCDAO {
 	final static String SQL_INSERT_NEW_STATS_LOG = "insert into minifier.stats_click_log (minified_alias,source_ip,user_agent,click_ts, referrer) values (?,?,?,?,?) ";
 	final static String SQL_UPDATE_CLICK_STATS = "UPDATE minifier.stats_clicks set click_cnt = (click_cnt + 1) and last_clicked_ts  = ? where minified_alias = ?";
 	final static String SQL_GET_NEXT_ID = "select nextval('minifier.alias_seq')";
-	DataSource ds = null;
+	static DataSource ds = null;
 
 	public PSQLDAO(DataSource ds) {
 		this.ds = ds;
 	}
 
 	public PSQLDAO(String url, String user, String pass) {
-		Jdbc3PoolingDataSource ds = null;
-		ds = new Jdbc3PoolingDataSource();
-		ds.setUrl(url);
-		ds.setDataSourceName("MinimizerPool");
-		ds.setUser(user);
-		ds.setPassword(pass);
-		ds.setMaxConnections(10);
-		this.ds = ds;
+		if(ds == null)
+		{
+			Jdbc3PoolingDataSource ds = null;
+			ds = new Jdbc3PoolingDataSource();
+			ds.setUrl(url);
+			ds.setDataSourceName("MinimizerPool");
+			ds.setUser(user);
+			ds.setPassword(pass);
+			ds.setMaxConnections(10);
+			this.ds = ds;
+		}
 	}
 
 	/*
@@ -93,6 +96,7 @@ public class PSQLDAO implements IJDBCDAO {
 			vo.setDestination(rs.getString("destination_url"));
 			vo.setIp(rs.getString("source_ip"));
 		} catch (SQLException e) {
+			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
 		} finally {
 			try {
