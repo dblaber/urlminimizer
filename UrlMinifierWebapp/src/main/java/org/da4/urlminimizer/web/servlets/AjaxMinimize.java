@@ -95,7 +95,7 @@ public class AjaxMinimize extends HttpServlet {
 		   }
 		Map<String,String> clientMetadata = new HashMap<String,String>();
 		clientMetadata.put("CLIENT_KEY", "WEBGUI");
-		clientMetadata.put("REFFERER", request.getHeader(HttpHeaders.REFERER));
+		clientMetadata.put("REFERER", request.getHeader(HttpHeaders.REFERER));
 		clientMetadata.put("IP", ipAddress);
 		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
 		String mini = minimizer.minimize(url,clientMetadata);

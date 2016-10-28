@@ -71,7 +71,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 					}
 					// first log
 					logger.debug("Updating stats for alias" + statsReq.getAlias());
-					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(), statsReq.getReferrer(), new Date());
+					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(), statsReq.getReferer(), new Date());
 					dao.incrementClickCount(statsReq.getAlias(), new Date());
 				}
 				
@@ -118,7 +118,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 		//only handle maximize for now
 		if(operation.equals(Operation.MAXIMIZE))
 		{
-			StatsRequestVO vo = new StatsRequestVO((String)input, (String)clientMetadata.get("USER_AGENT"), (String)clientMetadata.get("REFERRER"), 
+			StatsRequestVO vo = new StatsRequestVO((String)input, (String)clientMetadata.get("USER_AGENT"), (String)clientMetadata.get("REFERER"), 
 					(String)clientMetadata.get("IP"),false);
 			statQueue.add(vo);
 		}

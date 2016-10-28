@@ -85,7 +85,7 @@ public class Redirector extends HttpServlet {
 	       ipAddress = request.getRemoteAddr();  
 	   }
 		Map<String,String> clientMetadata = new HashMap<String,String>();
-		clientMetadata.put("REFFERER", request.getHeader(HttpHeaders.REFERER));
+		clientMetadata.put("REFERER", request.getHeader(HttpHeaders.REFERER));
 		clientMetadata.put("IP", ipAddress);
 		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
 		

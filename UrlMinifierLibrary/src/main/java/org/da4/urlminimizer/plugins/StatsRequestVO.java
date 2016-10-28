@@ -29,16 +29,16 @@ package org.da4.urlminimizer.plugins;
 public class StatsRequestVO {	
 	private String alias;
 	private String userAgent;
-	private String referrer;
+	private String referer;
 	private String ip;
 	private boolean newUrl = false;
 
 	
-	public StatsRequestVO(String alias, String userAgent, String referrer, String ip, boolean newUrl) {
+	public StatsRequestVO(String alias, String userAgent, String referer, String ip, boolean newUrl) {
 		super();
 		this.alias = alias;
 		this.userAgent = userAgent;
-		this.referrer = referrer;
+		this.referer = referer;
 		this.ip = ip;
 		this.newUrl = newUrl;
 	}
@@ -54,11 +54,11 @@ public class StatsRequestVO {
 	public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
 	}
-	public String getReferrer() {
-		return referrer;
+	public String getReferer() {
+		return referer;
 	}
-	public void setReferrer(String referrer) {
-		this.referrer = referrer;
+	public void setReferer(String referer) {
+		this.referer = referer;
 	}
 	public String getIp() {
 		return ip;

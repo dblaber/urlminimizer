@@ -61,7 +61,7 @@ public interface IJDBCDAO {
  */
 	URLVO getAliasFromDestination(String destination) throws AliasNotFound;
 void incrementClickCount(String alias, Date date);
-void insertStatsLog(String alias, String ip, String useragent, String referrer, Date date);
+void insertStatsLog(String alias, String ip, String useragent, String referer, Date date);
 void insertNewClicksCount(String alias, Date date);
 
 }

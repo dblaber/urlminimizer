@@ -131,7 +131,7 @@ public class PSQLDAO implements IJDBCDAO {
 			vo.setIp(rs.getString("source_ip"));
 			vo.setTimeCreated(rs.getTimestamp("created_ts"));
 			vo.setUserAgent(rs.getString("user_agent"));
-			vo.setReferrer(rs.getString("referrer"));
+			vo.setReferer(rs.getString("referrer"));
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
@@ -201,7 +201,7 @@ public class PSQLDAO implements IJDBCDAO {
 			stmt.setString(4, dataObj.getIp());
 			stmt.setString(5, dataObj.getUserAgent());
 			stmt.setTimestamp(6, new Timestamp(dataObj.getTimeCreated().getTime()));
-			stmt.setString(7, dataObj.getReferrer());
+			stmt.setString(7, dataObj.getReferer());
 			stmt.execute();
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
