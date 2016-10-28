@@ -42,6 +42,7 @@ import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.web.exception.RuntimeUrlWebException;
 import org.da4.urlminimizer.web.vo.Response;
 
+import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
 
 /**
@@ -94,7 +95,7 @@ public class AjaxMinimize extends HttpServlet {
 		   }
 		Map<String,String> clientMetadata = new HashMap<String,String>();
 		clientMetadata.put("CLIENT_KEY", "WEBGUI");
-		clientMetadata.put("REFFERER", request.getHeader("referer"));
+		clientMetadata.put("REFFERER", request.getHeader(HttpHeaders.REFERER));
 		clientMetadata.put("IP", ipAddress);
 		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
 		String mini = minimizer.minimize(url,clientMetadata);

@@ -39,6 +39,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.UrlMinimizer;
 
+import com.google.common.net.HttpHeaders;
+
 /**
  * Servlet implementation class Redirector
  * This servlet handles all urls that hit root url that don't match a servlet or file
@@ -83,7 +85,7 @@ public class Redirector extends HttpServlet {
 	       ipAddress = request.getRemoteAddr();  
 	   }
 		Map<String,String> clientMetadata = new HashMap<String,String>();
-		clientMetadata.put("REFFERER", request.getHeader("referer"));
+		clientMetadata.put("REFFERER", request.getHeader(HttpHeaders.REFERER));
 		clientMetadata.put("IP", ipAddress);
 		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
 		
