@@ -118,12 +118,19 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 		//only handle maximize for now
 		if(operation.equals(Operation.MAXIMIZE))
 		{
+			if(params.get("URL_CREATED") != null)
+			{
 			StatsRequestVO vo = new StatsRequestVO((String)input, (String)clientMetadata.get("USER_AGENT"), (String)clientMetadata.get("REFERER"), 
 					(String)clientMetadata.get("IP"),false);
 			statQueue.add(vo);
+			} else
+			{
+				logger.debug("Url not found, ignoring" + (String)input);
+			}
 		}
 		else if(operation.equals(Operation.MINIMIZE))
 		{
+			// 
 			if(params.get("URL_CREATED") != null && ((boolean)params.get("URL_CREATED")) == true)
 			{
 				StatsRequestVO vo = new StatsRequestVO((String)params.get("ALIAS"),null,null,null,true);

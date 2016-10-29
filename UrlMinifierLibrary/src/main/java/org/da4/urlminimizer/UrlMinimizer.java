@@ -147,6 +147,7 @@ public class UrlMinimizer {
 			URLVO out = (URLVO) plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 			if (out != null) {
 				realUrl = out.getDestination();
+				paramMap.put("REAL_URL", realUrl);
 				break;
 			}
 
