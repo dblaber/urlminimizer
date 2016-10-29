@@ -44,101 +44,96 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 	private IJDBCDAO dao = null;
 	private ExecutorService executor = null;
 	final static String RESERVED_ALIASES = "RESERVED_ALIASES";
-	class WorkerThread implements Runnable
-	{
+
+	class WorkerThread implements Runnable {
 		private int threadId;
 		private BlockingQueue<StatsRequestVO> statQueue;
 		private IJDBCDAO dao = null;
-		public WorkerThread(int threadId,BlockingQueue<StatsRequestVO> statQueue, IJDBCDAO dao) {
+
+		public WorkerThread(int threadId, BlockingQueue<StatsRequestVO> statQueue, IJDBCDAO dao) {
 			this.threadId = threadId;
 			this.statQueue = statQueue;
 			this.dao = dao;
 		}
+
 		@Override
 		public void run() {
 			Thread.currentThread().setName("Minimizer_Stats_thread_" + threadId);
+			while (!Thread.currentThread().isInterrupted()) {
+				try {
 
-			try {
-				while(!Thread.currentThread().isInterrupted())
-				{
 					StatsRequestVO statsReq = statQueue.take();
 					logger.debug("Stats thread awakens!");
-					//determine if its url creation, because then we will only insert click column
-					if(statsReq.isNewUrl())
-					{
+					// determine if its url creation, because then we will only
+					// insert click column
+					if (statsReq.isNewUrl()) {
 						dao.insertNewClicksCount(statsReq.getAlias(), new Date());
 						continue;
 					}
 					// first log
 					logger.debug("Updating stats for alias" + statsReq.getAlias());
-					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(), statsReq.getReferer(), new Date());
+					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(),
+							statsReq.getReferer(), new Date());
 					dao.incrementClickCount(statsReq.getAlias(), new Date());
+
+				} catch (InterruptedException e) {
+					logger.error("Thread interrupted!", e);
+					Thread.currentThread().interrupt();
+					return;
+				} catch (Exception e) {
+					logger.error("Worker thread Exception", e);
 				}
-				
-			}catch (InterruptedException e) 
-			{
-				logger.error("Thread interrupted!",e);
-				Thread.currentThread().interrupt();
 			}
-			catch (Exception e) {
-				logger.error("Worker thread Exception",e);
-			}
-			
+
 		}
 	}
-	
+
 	@Override
 	public void init(Map<String, String> params) {
 		super.init(params);
 		dao = new PSQLDAO(params.get("url"), params.get("userid"), params.get("password"));
 		statQueue = new LinkedBlockingQueue<StatsRequestVO>();
 		int workerCount = 4;
-		if(params.get("WorkerCount") != null)
+		if (params.get("WorkerCount") != null)
 			workerCount = Integer.parseInt(params.get("WorkerCount"));
 		executor = Executors.newFixedThreadPool(workerCount);
-		//set up worker threads
-		for(int i=0; i < workerCount; i++)
-		{
-			WorkerThread worker = new WorkerThread(i, statQueue,dao);
+		// set up worker threads
+		for (int i = 0; i < workerCount; i++) {
+			WorkerThread worker = new WorkerThread(i, statQueue, dao);
 			executor.execute(worker);
 		}
 	}
 
 	@Override
 	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
-		super.execute(hook, operation, input,output, params);
-		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");
+		super.execute(hook, operation, input, output, params);
+		Map<String, String> clientMetadata = (Map<String, String>) params.get("CLIENT_METADATA");
 		// if null lets just create empty map to avoid null checks later
-		if(clientMetadata == null)
-			clientMetadata = new HashMap<String,String>();
+		if (clientMetadata == null)
+			clientMetadata = new HashMap<String, String>();
 		Set<String> reservedSet = (Set<String>) params.get(RESERVED_ALIASES);
-		if(reservedSet.contains(input))
+		if (reservedSet.contains(input))
 			return input;
-		
-		//only handle maximize for now
-		if(operation.equals(Operation.MAXIMIZE))
-		{
-			if(params.get("URL_CREATED") != null)
-			{
-			StatsRequestVO vo = new StatsRequestVO((String)input, (String)clientMetadata.get("USER_AGENT"), (String)clientMetadata.get("REFERER"), 
-					(String)clientMetadata.get("IP"),false);
-			statQueue.add(vo);
-			} else
-			{
-				logger.debug("Url not found, ignoring" + (String)input);
+
+		// only handle maximize for now
+		if (operation.equals(Operation.MAXIMIZE)) {
+			if (params.get("URL_CREATED") != null) {
+				StatsRequestVO vo = new StatsRequestVO((String) input, (String) clientMetadata.get("USER_AGENT"),
+						(String) clientMetadata.get("REFERER"), (String) clientMetadata.get("IP"), false);
+				statQueue.add(vo);
+			} else {
+				logger.debug("Url not found, ignoring" + (String) input);
 			}
-		}
-		else if(operation.equals(Operation.MINIMIZE))
-		{
-			// 
-			if(params.get("URL_CREATED") != null && ((boolean)params.get("URL_CREATED")) == true)
-			{
-				StatsRequestVO vo = new StatsRequestVO((String)params.get("ALIAS"),null,null,null,true);
+		} else if (operation.equals(Operation.MINIMIZE)) {
+			//
+			if (params.get("URL_CREATED") != null && ((boolean) params.get("URL_CREATED")) == true) {
+				StatsRequestVO vo = new StatsRequestVO((String) params.get("ALIAS"), null, null, null, true);
 				statQueue.add(vo);
 			}
 		}
 		return input;
 	}
+
 	@Override
 	public void finished() {
 		super.finished();
