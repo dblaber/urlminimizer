@@ -117,7 +117,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 
 		// only handle maximize for now
 		if (operation.equals(Operation.MAXIMIZE)) {
-			if (params.get("URL_CREATED") != null) {
+			if (params.get("REAL_URL") != null) {
 				StatsRequestVO vo = new StatsRequestVO((String) input, (String) clientMetadata.get("USER_AGENT"),
 						(String) clientMetadata.get("REFERER"), (String) clientMetadata.get("IP"), false);
 				statQueue.add(vo);
