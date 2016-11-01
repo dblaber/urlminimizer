@@ -43,7 +43,7 @@ public interface IPlugin {
  * @param hook Hook into an area of minimizer, currently Preprocessing, Postprocessing or processing
  * @param operation Operation in which the plugin was called. Could be minimize or maximize
  * @param input Input parameter to plugin
- * @param output Ouput object optionally can be supplied
+ * @param output Output object optionally can be supplied
  * @param params Additional parameters that can be passed to the plugin at runtime
  * @return An object can be returned from plugin that can be used in workflow of minimization
  */
