@@ -36,7 +36,8 @@ import com.google.common.cache.CacheBuilder;
 public class HashCacheStoragePlugin extends PluginAPI {
 	private int maxCacheCount = 0;
 	private static final Logger logger = LogManager.getLogger(HashCacheStoragePlugin.class);
-	Cache<String, URLVO> cache = null;
+	static private Cache<String, URLVO> aliasCache = null;
+	static private Cache<String, URLVO> bigUrlCache = null;
 /**
  * Expects 'maxcachecount' to be provided as a param
  */
@@ -48,20 +49,38 @@ public void init(Map<String, String> params) {
 		maxCacheCount = Integer.parseInt((String)params.get("maxcachecount"));
 	this.maxCacheCount = maxCacheCount;
 	logger.debug("Setting up cache");
-	cache = CacheBuilder.newBuilder().maximumSize(maxCacheCount).build();
+	aliasCache = CacheBuilder.newBuilder().maximumSize(maxCacheCount).build();
+	bigUrlCache = CacheBuilder.newBuilder().maximumSize(maxCacheCount).build();
+	logger.info("Created alias cache and bigurl cache, " + maxCacheCount + " max size each!");
 	
 }
 @Override
 	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
-		if(operation.equals(Operation.MINIMIZE)){
+		if(operation.equals(Operation.MAXIMIZE)){
 			if(hook.equals(Hook.POSTPROCESSOR))
 			{
-				//cache.put(key, value);
+				URLVO url = (URLVO)params.get("REAL_URL");
+				aliasCache.put(url.getAlias(), url);
+			} else if(hook.equals(Hook.PROCESSOR))
+			{
+				if(aliasCache.getIfPresent((String)input) != null)
+					logger.debug("Cache Hit!");
+				return aliasCache.getIfPresent((String)input);
 			}
 			
-		}else if (operation.equals(Operation.MAXIMIZE))
+		}else if (operation.equals(Operation.MINIMIZE))
 		{
-			
+			if(hook.equals(Hook.POSTPROCESSOR))
+			{
+				URLVO url = (URLVO)params.get("ALIAS");
+				bigUrlCache.put(url.getDestination(), url);
+				
+			}else if(hook.equals(Hook.PROCESSOR))
+			{
+				if(bigUrlCache.getIfPresent((String)input) != null)
+					logger.debug("Cache hit!");
+				return bigUrlCache.getIfPresent((String)input);
+			}
 		}
 		return super.execute(hook, operation, input, output, params);
 	}

@@ -118,7 +118,7 @@ public class UrlMinimizer {
 	 */
 	public String minimize(String in, Map<String, String> clientMetadata) {
 		logger.debug("Maximizing " + in);
-		URLVO alias = null;
+		URLVO out = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("CLIENT_METADATA", clientMetadata);
 		// preprocessing
@@ -129,9 +129,9 @@ public class UrlMinimizer {
 
 		// processing
 		for (IPlugin plugin : procplugins) {
-			alias = plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
-			paramMap.put("ALIAS", alias.getAlias());
-			if (alias != null)
+			out = plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+			paramMap.put("ALIAS", out);
+			if (out != null)
 				break;
 		}
 
@@ -139,7 +139,7 @@ public class UrlMinimizer {
 		for (IPlugin preplugins : postplugins) {
 			preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 		}
-		return config.getRootUrl() + alias;
+		return config.getRootUrl() + out.getAlias();
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class UrlMinimizer {
 	 * @return Full destination url 'maximized'
 	 */
 	public String maximize(String in, Map<String, String> clientMetadata) {
-		String realUrl = null;
+		URLVO realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("CLIENT_METADATA", clientMetadata);
 		// preprocessing
@@ -161,9 +161,8 @@ public class UrlMinimizer {
 
 		// processing
 		for (IPlugin plugin : procplugins) {
-			URLVO out = plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
-			if (out != null) {
-				realUrl = out.getDestination();
+			realUrl = plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+			if (realUrl != null) {
 				paramMap.put("REAL_URL", realUrl);
 				break;
 			}
@@ -174,7 +173,7 @@ public class UrlMinimizer {
 		for (IPlugin plugin : postplugins) {
 			plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
-		return realUrl;
+		return realUrl.getDestination();
 	}
 
 	/**

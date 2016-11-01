@@ -111,7 +111,7 @@ public class AjaxMinimize extends HttpServlet {
 			return;
 		} catch (Exception e)
 		{
-
+			logger.error("Unhandled Exception",e);
 			Response resp = new Response(null, null);
 			resp.setError("Unknown Error has occured");
 			response.getWriter().append(gson.toJson(resp));

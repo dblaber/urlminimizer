@@ -129,7 +129,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 		} else if (operation.equals(Operation.MINIMIZE)) {
 			//
 			if (params.get("URL_CREATED") != null && ((boolean) params.get("URL_CREATED")) == true) {
-				StatsRequestVO vo = new StatsRequestVO((String) params.get("ALIAS"), null, null, null, true);
+				StatsRequestVO vo = new StatsRequestVO(((URLVO) params.get("ALIAS")).getAlias(), null, null, null, true);
 				statQueue.add(vo);
 			}
 		}

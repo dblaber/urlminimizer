@@ -56,7 +56,7 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
  * Persist once open sequence is found
  */
 	@Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		super.execute(hook, operation, input, output, params);
 		boolean urlCreated = false;
 		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");
@@ -90,7 +90,7 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 				params.put("URL_CREATED",true);
 			}
 			output = url.getAlias();
-			return url.getAlias();
+			return url;
 		} else {
 			throw new RuntimeUrlException("Invalid operation `" + operation + "`");
 		}
