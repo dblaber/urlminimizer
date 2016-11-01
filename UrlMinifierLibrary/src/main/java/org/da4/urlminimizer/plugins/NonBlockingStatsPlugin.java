@@ -37,6 +37,7 @@ import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.plugins.sql.IJDBCDAO;
 import org.da4.urlminimizer.plugins.sql.PSQLDAO;
+import org.da4.urlminimizer.vo.URLVO;
 
 public class NonBlockingStatsPlugin extends PluginAPI {
 	private BlockingQueue<StatsRequestVO> statQueue = null;
@@ -105,15 +106,16 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 	}
 
 	@Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		super.execute(hook, operation, input, output, params);
 		Map<String, String> clientMetadata = (Map<String, String>) params.get("CLIENT_METADATA");
 		// if null lets just create empty map to avoid null checks later
 		if (clientMetadata == null)
 			clientMetadata = new HashMap<String, String>();
 		Set<String> reservedSet = (Set<String>) params.get(RESERVED_ALIASES);
+		//ignore reserved url for now
 		if (reservedSet.contains(input))
-			return input;
+			return null;
 
 		// only handle maximize for now
 		if (operation.equals(Operation.MAXIMIZE)) {
@@ -131,7 +133,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 				statQueue.add(vo);
 			}
 		}
-		return input;
+		return null;
 	}
 
 	@Override

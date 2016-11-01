@@ -118,19 +118,19 @@ public class UrlMinimizer {
 	 */
 	public String minimize(String in, Map<String, String> clientMetadata) {
 		logger.debug("Maximizing " + in);
-		String alias = null;
+		URLVO alias = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("CLIENT_METADATA", clientMetadata);
 		// preprocessing
 		for (IPlugin preplugins : preplugins) {
-			in = (String) preplugins.execute(Hook.PREPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+			preplugins.execute(Hook.PREPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 
 		}
 
 		// processing
 		for (IPlugin plugin : procplugins) {
-			alias = (String) plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
-			paramMap.put("ALIAS", alias);
+			alias = plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+			paramMap.put("ALIAS", alias.getAlias());
 			if (alias != null)
 				break;
 		}
@@ -155,13 +155,13 @@ public class UrlMinimizer {
 		paramMap.put("CLIENT_METADATA", clientMetadata);
 		// preprocessing
 		for (IPlugin plugin : preplugins) {
-			in = (String) plugin.execute(Hook.PREPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+			plugin.execute(Hook.PREPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 
 		}
 
 		// processing
 		for (IPlugin plugin : procplugins) {
-			URLVO out = (URLVO) plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+			URLVO out = plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 			if (out != null) {
 				realUrl = out.getDestination();
 				paramMap.put("REAL_URL", realUrl);

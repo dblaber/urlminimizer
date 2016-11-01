@@ -52,8 +52,12 @@ public void init(Map<String, String> params) {
 	
 }
 @Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		if(operation.equals(Operation.MINIMIZE)){
+			if(hook.equals(Hook.POSTPROCESSOR))
+			{
+				//cache.put(key, value);
+			}
 			
 		}else if (operation.equals(Operation.MAXIMIZE))
 		{

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
+import org.da4.urlminimizer.vo.URLVO;
 /**
  * Plugin api. Method plugin must implement to hook into the url minimizer
  * @author dmb
@@ -47,7 +48,7 @@ public interface IPlugin {
  * @param params Additional parameters that can be passed to the plugin at runtime
  * @return An object can be returned from plugin that can be used in workflow of minimization
  */
-	Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params);
+	URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params);
 	/**
 	 * Called during termination of the plugin
 	 */
