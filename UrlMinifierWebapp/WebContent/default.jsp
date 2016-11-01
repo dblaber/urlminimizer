@@ -23,7 +23,7 @@
 			}
 			
 			console.log("JSON Data: " + json.minifiedUrl);
-			var htmlToAppend = '<h1>Result</h2><span class="c-code">'
+			var htmlToAppend = '<div class="c-text--loud"> Result</div><span class="c-code">'
 			$('#minifiedUrlArea').html(htmlToAppend + json.minifiedUrl + "</span>");
 
 		}).fail(function(jqxhr, textStatus, error) {
@@ -93,7 +93,7 @@ margin-right: auto; display: block; width:100px;height:100px;" src="arrow.png">
 	</div>
 	<div id="footer" class="u-center-block__content u-center-block__content--horizontal">
 	<div  class="u-center-block__content">
-	<p>Copyright 2016 Darren Blaber.</p><p> Abuse Contact: abuse@ne8.org</p>
+	<div><span class="c-text--quiet">Copyright 2016 Darren Blaber.</span></div><p> Abuse Contact: abuse@ne8.org</p>
 	</div>
 	</div>
 
