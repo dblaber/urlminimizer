@@ -28,7 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
-import org.da4.urlminimizer.UrlMinimizer;
+import org.da4.urlminimizer.vo.URLVO;
 /**
  * Abstract class for plugin, mainly used for logging purposes
  * @author dmb
@@ -58,7 +58,7 @@ public class PluginAPI implements IPlugin {
 	 * Operation, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public Object execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
 		logger.trace("Starting execution of plugin `" + this.getClass().getName() + "` , Operation: " + operation
 				+ " hook: " + hook + "...");
 		return null;

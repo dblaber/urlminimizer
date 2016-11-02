@@ -34,9 +34,11 @@ import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.da4.urlminimizer.vo.PluginVO;
 import org.da4.urlminimizer.vo.URLVO;
+
 /**
- * Main class that is entrypoint to the url minimizer library. The main methods to minimize and maximize will
- * exist here, along with basic skeleton workflow
+ * Main class that is entrypoint to the url minimizer library. The main methods
+ * to minimize and maximize will exist here, along with basic skeleton workflow
+ * 
  * @author dmb
  *
  */
@@ -46,12 +48,19 @@ public class UrlMinimizer {
 	private Set<IPlugin> procplugins = new LinkedHashSet<IPlugin>();
 	private Set<IPlugin> postplugins = new LinkedHashSet<IPlugin>();
 	ConfigVO config = null;
+
 	/**
-	 * Constructor to deal with getting config and creating instance of plugins and calling init on plugins
-	 * @param configFile Config file that will be parsed to create ConfigVO object
-	 * @throws InstantiationException Reflection error
-	 * @throws IllegalAccessException Reflection error
-	 * @throws ClassNotFoundException Plugin class can not be found
+	 * Constructor to deal with getting config and creating instance of plugins
+	 * and calling init on plugins
+	 * 
+	 * @param configFile
+	 *            Config file that will be parsed to create ConfigVO object
+	 * @throws InstantiationException
+	 *             Reflection error
+	 * @throws IllegalAccessException
+	 *             Reflection error
+	 * @throws ClassNotFoundException
+	 *             Plugin class can not be found
 	 */
 	public UrlMinimizer(String configFile)
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
@@ -69,17 +78,16 @@ public class UrlMinimizer {
 					logger.info("Loading PREPROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					preplugins.add(pluginImpl);
-				} else if (plugin.getHooks().contains(Hook.POSTPROCESSOR)) {
+				}
+				if (plugin.getHooks().contains(Hook.POSTPROCESSOR)) {
 					logger.info("Loading POSTPROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					postplugins.add(pluginImpl);
-				} else if (plugin.getHooks().contains(Hook.PROCESSOR)) {
+				}
+				if (plugin.getHooks().contains(Hook.PROCESSOR)) {
 					logger.info("Loading PROCESSOR plugin `" + plugin.getClazz() + "`");
 					pluginImpl = (IPlugin) Class.forName(plugin.getClazz()).newInstance();
 					procplugins.add(pluginImpl);
-				} else {
-					logger.error("Invalid Hook. Ignoring plugin. Hooks: " + plugin.getHooks());
-					continue;
 				}
 				pluginImpl.init(plugin.getAttributes());
 
@@ -95,66 +103,98 @@ public class UrlMinimizer {
 	public ConfigVO getConfig() {
 		return config;
 	}
+
 	/**
-	 * Method to minimize a url, minify it, create alias and provide aliased url as result
-	 * @param in Input url to minimize
-	 * @param ip ip address of client requesting we create url
-	 * @param clientKey Client key of client that is requesting url be created
+	 * Method to minimize a url, minify it, create alias and provide aliased url
+	 * as result
+	 * 
+	 * @param in
+	 *            Input url to minimize
+	 * @param ip
+	 *            ip address of client requesting we create url
+	 * @param clientKey
+	 *            Client key of client that is requesting url be created
 	 * @return The minimized url for the destination
 	 */
-	public String minimize(String in, Map<String,String> clientMetadata) {
+	public String minimize(String in, Map<String, String> clientMetadata) {
 		logger.debug("Maximizing " + in);
-		String alias = null;
+		URLVO out = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("CLIENT_METADATA",clientMetadata);
+		paramMap.put("CLIENT_METADATA", clientMetadata);
 		// preprocessing
 		for (IPlugin preplugins : preplugins) {
-			in = (String) preplugins.execute(Hook.PREPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+			preplugins.execute(Hook.PREPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 
 		}
 
 		// processing
 		for (IPlugin plugin : procplugins) {
-			alias = (String) plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
-			if (alias != null)
+			out = plugin.execute(Hook.PROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+			paramMap.put("ALIAS", out);
+			if (out != null)
 				break;
 		}
 
 		// POSTPROCESSOR
-		for (IPlugin preplugins : preplugins) {
-			alias = (String) preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
+		for (IPlugin preplugins : postplugins) {
+			preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 		}
-		return config.getRootUrl() + alias;
+		return config.getRootUrl() + out.getAlias();
 	}
+
 	/**
 	 * Get destination url fron input alias
-	 * @param in Input as alias 
+	 * 
+	 * @param in
+	 *            Input as alias
 	 * @return Full destination url 'maximized'
 	 */
-	public String maximize(String in) {
-		String realUrl = null;
+	public String maximize(String in, Map<String, String> clientMetadata) {
+		URLVO realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("CLIENT_METADATA", clientMetadata);
 		// preprocessing
 		for (IPlugin plugin : preplugins) {
-			in = (String) plugin.execute(Hook.PREPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+			plugin.execute(Hook.PREPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 
 		}
 
 		// processing
 		for (IPlugin plugin : procplugins) {
-			URLVO out = (URLVO) plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
-			if (out != null) {
-				realUrl = out.getDestination();
+			realUrl = plugin.execute(Hook.PROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+			if (realUrl != null) {
+				paramMap.put("REAL_URL", realUrl);
 				break;
 			}
 
 		}
 
 		// POSTPROCESSOR
-		for (IPlugin plugin : preplugins) {
-			realUrl = (String) plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
+		for (IPlugin plugin : postplugins) {
+			plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
-		return realUrl;
+		return realUrl.getDestination();
+	}
+
+	/**
+	 * Shutdown the plugin system. Call when a long running container needs to
+	 * shutdown, for example a j2ee container
+	 */
+	public void shutdown() {
+		logger.info("Shutting down minimizer...");
+		for (IPlugin plugin : preplugins) {
+			plugin.finished();
+		}
+
+		// processing
+		for (IPlugin plugin : procplugins) {
+			plugin.finished();
+		}
+
+		// POSTPROCESSOR
+		for (IPlugin plugin : postplugins) {
+			plugin.finished();
+		}
 	}
 
 }

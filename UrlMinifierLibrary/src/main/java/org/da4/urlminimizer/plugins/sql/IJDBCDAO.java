@@ -22,7 +22,14 @@
  *******************************************************************************/
 package org.da4.urlminimizer.plugins.sql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
+
 import org.da4.urlminimizer.exception.AliasNotFound;
+import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.vo.URLVO;
 /**
  * DAO Class for SQL relational solutions
@@ -53,5 +60,8 @@ public interface IJDBCDAO {
  * @throws AliasNotFound
  */
 	URLVO getAliasFromDestination(String destination) throws AliasNotFound;
+void incrementClickCount(String alias, Date date);
+void insertStatsLog(String alias, String ip, String useragent, String referer, Date date);
+void insertNewClicksCount(String alias, Date date);
 
 }

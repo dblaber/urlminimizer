@@ -18,8 +18,13 @@ Postprocessor: Processed after proccessor
 <attribute name='url' value='jdbc:postgresql://pi2.patinhas.da4.org:5432/ne8minifier' />
 </plugin>
 
+<plugin class="org.da4.urlminimizer.plugins.NonBlockingStatsPlugin" hook="Postprocessor">
+<attribute name='userid' value='webne8' />
+<attribute name='password' value='' />
+<attribute name='url' value='jdbc:postgresql://pi2.patinhas.da4.org:5432/ne8minifier' />
+</plugin>
 
-<plugin class="org.da4.urlminimizer.plugins.HashCacheStoragePlugin" hook="Processor,PostProcessor">
+<plugin class="org.da4.urlminimizer.plugins.HashCacheStoragePlugin" hook="Processor,Postprocessor">
 <attribute name='maxcachecount' value='1000' />
 </plugin>
 

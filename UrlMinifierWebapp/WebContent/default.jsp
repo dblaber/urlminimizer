@@ -2,19 +2,19 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="Description" content="Simple, free fast open source free url shortener. Make a large url smaller without the hastle. ">
-<meta name="Keywords" content="url minimizer,ne8.org,url shortener, open source,tinyurl,url shortening service">
+<meta name="description" content="Simple, free fast open source free url shortener. Make a large url smaller without the hastle. ">
+<meta name="keywords" content="url minimizer,ne8.org,url shortener, open source,tinyurl,url shortening service">
 <link rel="stylesheet" href="https://unpkg.com/blaze">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"
 	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 	crossorigin="anonymous" type="text/javascript"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script type="text/javascript">
 	function sendBigUrl(url) {
-		$.getJSON("AjaxMinimize", {
+		$.getJSON("AjaxMinimize.do", {
 			url : url
 		}).done(function(json) {
 			if(json == null || json.minifiedUrl == null || json.minifiedUrl == "")
@@ -23,7 +23,8 @@
 			}
 			
 			console.log("JSON Data: " + json.minifiedUrl);
-			$('#minifiedUrlArea').html(json.minifiedUrl);
+			var htmlToAppend = '<div class="c-text--loud"> Result</div><span class="c-code">'
+			$('#minifiedUrlArea').html(htmlToAppend + json.minifiedUrl + "</span>");
 
 		}).fail(function(jqxhr, textStatus, error) {
 			var err = textStatus + ", " + error;
@@ -68,8 +69,12 @@ body {
 	<div id="main" class="u-center-block">
 	<div class="u-center-block__content">
 		<h1 class='c-heading'>ne8.org URL Minimizer</h1>
-		<p>Short, simple, <a href="https://github.com/dblaber/urlminimizer"> Open
-			Source! </a></p>
+		<p>Minimize and shorten your long URL. Short, simple, <a href="https://github.com/dblaber/urlminimizer"> Open
+			Source! </a></p> 
+			<div class = "u-xsmall"><span class="c-code c-code--multiline">http://stackoverflow.com/questions/6764...</span><img class="o-image" style="margin-left: auto;
+margin-right: auto; display: block; width:100px;height:100px;" src="arrow.png">
+			<span class="c-code c-code--multiline"> http://ne8.org/19  </span>
+			</div>
 			<div class="o-form-element">
 				<div class="c-input-group c-input-group--stacked">
 					<div class="o-field">
@@ -82,13 +87,13 @@ body {
 				</div>
 			</div>
 
-		<h2 class="c-heading" id="minifiedUrlArea"></h2>
+		<div id="minifiedUrlArea"></div>
 	</div>
 	<div></div>
 	</div>
 	<div id="footer" class="u-center-block__content u-center-block__content--horizontal">
 	<div  class="u-center-block__content">
-	<p>Copyright 2016 Darren Blaber.</p><p> Abuse Contact: abuse@ne8.org</p>
+	<div><span class="c-text--quiet">Copyright 2016 Darren Blaber.</span></div><p> Abuse Contact: abuse@ne8.org</p>
 	</div>
 	</div>
 

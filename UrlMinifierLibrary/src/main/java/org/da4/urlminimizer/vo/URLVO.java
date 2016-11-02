@@ -34,8 +34,15 @@ public class URLVO {
 	private String creatorApiKey;
 	private String userAgent;
 	private Date timeCreated;
+	private String referer;
 	boolean isSpam = false;
 	
+	public String getReferer() {
+		return referer;
+	}
+	public void setReferer(String referer) {
+		this.referer = referer;
+	}
 	public String getUserAgent() {
 		return userAgent;
 	}

@@ -18,7 +18,7 @@ eclipse{
     wtp{ 
         facet {
             facet name: 'java', version: '1.7'
-            facet name: 'jst.web', version: '3.0'
+            facet name: 'jst.web', version: '3.1'
         }
     }
 }   

@@ -27,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -42,24 +43,29 @@ public class PSQLDAO implements IJDBCDAO {
 	final static String SQL_GET_DESTINATION_FROM_ALIAS = "select * from minifier.minimized_urls where minified_alias = ?";
 	final static String SQL_GET_ALIAS_FROM_DESTINATION = "select * from minifier.minimized_urls where destination_url = ?";
 
-	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip,user_agent,created_ts) values (?,?,?,?,?,?) ";
-
+	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip,user_agent,created_ts,referrer) values (?,?,?,?,?,?,?) ";
+	final static String SQL_INSERT_NEW_ALIAS_STATS = "insert into minifier.stats_clicks (minified_alias,click_cnt,last_clicked_ts) values (?,?,?) ";
+	final static String SQL_INSERT_NEW_STATS_LOG = "insert into minifier.stats_click_log (minified_alias,source_ip,user_agent,click_ts, referrer) values (?,?,?,?,?) ";
+	final static String SQL_UPDATE_CLICK_STATS = "UPDATE minifier.stats_clicks set click_cnt = (click_cnt + 1),last_clicked_ts  = ? where minified_alias = ?";
 	final static String SQL_GET_NEXT_ID = "select nextval('minifier.alias_seq')";
-	DataSource ds = null;
+	static DataSource ds = null;
 
 	public PSQLDAO(DataSource ds) {
 		this.ds = ds;
 	}
 
 	public PSQLDAO(String url, String user, String pass) {
-		Jdbc3PoolingDataSource ds = null;
-		ds = new Jdbc3PoolingDataSource();
-		ds.setUrl(url);
-		ds.setDataSourceName("MinimizerPool");
-		ds.setUser(user);
-		ds.setPassword(pass);
-		ds.setMaxConnections(10);
-		this.ds = ds;
+		if(ds == null)
+		{
+			Jdbc3PoolingDataSource ds = null;
+			ds = new Jdbc3PoolingDataSource();
+			ds.setUrl(url);
+			ds.setDataSourceName("MinimizerPool");
+			ds.setUser(user);
+			ds.setPassword(pass);
+			ds.setMaxConnections(10);
+			this.ds = ds;
+		}
 	}
 
 	/*
@@ -90,6 +96,7 @@ public class PSQLDAO implements IJDBCDAO {
 			vo.setDestination(rs.getString("destination_url"));
 			vo.setIp(rs.getString("source_ip"));
 		} catch (SQLException e) {
+			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
 		} finally {
 			try {
@@ -120,10 +127,11 @@ public class PSQLDAO implements IJDBCDAO {
 
 			vo.setAlias(rs.getString("minified_alias"));
 			vo.setCreatorApiKey(rs.getString("creation_api_key"));
-			vo.setDestination("destination_url");
+			vo.setDestination(rs.getString("destination_url"));
 			vo.setIp(rs.getString("source_ip"));
 			vo.setTimeCreated(rs.getTimestamp("created_ts"));
 			vo.setUserAgent(rs.getString("user_agent"));
+			vo.setReferer(rs.getString("referrer"));
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
@@ -193,6 +201,7 @@ public class PSQLDAO implements IJDBCDAO {
 			stmt.setString(4, dataObj.getIp());
 			stmt.setString(5, dataObj.getUserAgent());
 			stmt.setTimestamp(6, new Timestamp(dataObj.getTimeCreated().getTime()));
+			stmt.setString(7, dataObj.getReferer());
 			stmt.execute();
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
@@ -205,4 +214,101 @@ public class PSQLDAO implements IJDBCDAO {
 			}
 		}
 	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.da4.urlminimizer.plugins.IJDBCDAO#insertNewClicksCount(org.da4.urlminimizer.vo.
+	 * URLVO)
+	 */
+	@Override
+	public void insertNewClicksCount(String alias, Date date)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(SQL_INSERT_NEW_ALIAS_STATS);
+			logger.debug("SQL to be run: "+SQL_INSERT_NEW_ALIAS_STATS+" Param: " + alias + ", " + 0 + ", " + date);
+			stmt.setString(1, alias);
+			stmt.setLong(2, 0);
+			stmt.setTimestamp(3, new Timestamp(date.getTime()));
+			stmt.execute();
+		}catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.da4.urlminimizer.plugins.IJDBCDAO#insertStatsLog(org.da4.urlminimizer.vo.
+	 * URLVO)
+	 */
+	@Override
+	public void insertStatsLog(String alias, String ip, String useragent, String referrer, Date date)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			//minified_alias,source_ip,user_agent,click_ts, referrer
+			stmt = conn.prepareStatement(SQL_INSERT_NEW_STATS_LOG);
+			logger.debug("SQL to be run: "+SQL_INSERT_NEW_STATS_LOG+" Param: " + alias + ", " + ip + ", " + useragent + ", " + date + ", " + referrer);
+			stmt.setString(1, alias);
+			stmt.setString(2, ip);
+			stmt.setString(3, useragent);
+			stmt.setTimestamp(4, new Timestamp(date.getTime()));
+			stmt.setString(5, referrer);
+			stmt.execute();
+		}catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.da4.urlminimizer.plugins.IJDBCDAO#incrementClickCount(org.da4.urlminimizer.vo.
+	 * URLVO)
+	 */
+	@Override
+	public void incrementClickCount(String alias, Date date)
+	{
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(SQL_UPDATE_CLICK_STATS);
+			logger.debug("SQL to be run: "+SQL_UPDATE_CLICK_STATS+" Param: " + date + ", " + 0 + ", " + alias);
+			stmt.setTimestamp(1, new Timestamp(date.getTime()));
+			stmt.setString(2, alias);
+			stmt.execute();
+		}catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	
+	
 }

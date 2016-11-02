@@ -42,13 +42,14 @@ import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.web.exception.RuntimeUrlWebException;
 import org.da4.urlminimizer.web.vo.Response;
 
+import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
 
 /**
  * Servlet implementation class AjaxMinimize
  * Web class that returns json for minimized url
  */
-@WebServlet("/AjaxMinimize")
+@WebServlet("/AjaxMinimize.do")
 public class AjaxMinimize extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LogManager.getLogger(AjaxMinimize.class);
@@ -94,6 +95,7 @@ public class AjaxMinimize extends HttpServlet {
 		   }
 		Map<String,String> clientMetadata = new HashMap<String,String>();
 		clientMetadata.put("CLIENT_KEY", "WEBGUI");
+		clientMetadata.put("REFERER", request.getHeader(HttpHeaders.REFERER));
 		clientMetadata.put("IP", ipAddress);
 		clientMetadata.put("USER_AGENT", request.getHeader("User-Agent"));
 		String mini = minimizer.minimize(url,clientMetadata);
@@ -109,7 +111,7 @@ public class AjaxMinimize extends HttpServlet {
 			return;
 		} catch (Exception e)
 		{
-
+			logger.error("Unhandled Exception",e);
 			Response resp = new Response(null, null);
 			resp.setError("Unknown Error has occured");
 			response.getWriter().append(gson.toJson(resp));
