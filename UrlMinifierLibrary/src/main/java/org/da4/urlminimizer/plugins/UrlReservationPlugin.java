@@ -63,6 +63,7 @@ public class UrlReservationPlugin extends PluginAPI {
 				return null;
 			URLVO vo = new URLVO();
 			vo.setAlias(aliasToUrlMap.inverse().get(input));
+			vo.setDestination((String)input);
 			return vo;
 		} else {
 			throw new RuntimeUrlException("Invalid operation `" + operation + "`");

@@ -51,11 +51,11 @@ public class TestUrlMinimizer {
 
 	@Test
 	public void testMinimize() {
-		String small = mini.minimize("http://google.com",null);
+		String small = mini.minimize("http://google.com",new HashMap<String,String>());
 		System.out.println("small url: " + small);
 		assertEquals(config.getRootUrl() + "xyz", small);
 		for (int i = 0; i < 100; i++) {
-			small = mini.minimize("http://google2.com" + i,null);
+			small = mini.minimize("http://google2.com" + i,new HashMap<String,String>());
 			System.out.println("small url" + i + ": " + small);
 			assertNotNull(small);
 		}
