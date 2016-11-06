@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
+import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.vo.URLVO;
 
@@ -45,7 +46,7 @@ public class UrlReservationPlugin extends PluginAPI {
 	}
 
 	@Override
-	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound {
 		super.execute(hook, operation, input, output, params);
 		params.put("RESERVED_ALIASES", aliasToUrlMap.keySet());
 		if (Operation.MAXIMIZE.equals(operation)) {

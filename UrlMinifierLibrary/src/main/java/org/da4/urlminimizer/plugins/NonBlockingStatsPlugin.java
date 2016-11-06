@@ -35,6 +35,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
+import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.plugins.sql.IJDBCDAO;
 import org.da4.urlminimizer.plugins.sql.PSQLDAO;
 import org.da4.urlminimizer.vo.URLVO;
@@ -106,7 +107,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 	}
 
 	@Override
-	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound {
 		super.execute(hook, operation, input, output, params);
 		Map<String, String> clientMetadata = (Map<String, String>) params.get("CLIENT_METADATA");
 		// if null lets just create empty map to avoid null checks later
