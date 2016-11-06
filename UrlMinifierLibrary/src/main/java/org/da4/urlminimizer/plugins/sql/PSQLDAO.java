@@ -42,12 +42,13 @@ public class PSQLDAO implements IJDBCDAO {
 	private static final Logger logger = LogManager.getLogger(PSQLDAO.class);
 	final static String SQL_GET_DESTINATION_FROM_ALIAS = "select * from minifier.minimized_urls where minified_alias = ?";
 	final static String SQL_GET_ALIAS_FROM_DESTINATION = "select * from minifier.minimized_urls where destination_url = ?";
-
+	final static String SQL_GET_APIKEY_INFO = "select * from minifier.api_registration where api_key = ? and active = true";
 	final static String SQL_INSERT_NEW_ALIAS = "insert into minifier.minimized_urls (minified_alias,creation_api_key,destination_url,source_ip,user_agent,created_ts,referrer) values (?,?,?,?,?,?,?) ";
 	final static String SQL_INSERT_NEW_ALIAS_STATS = "insert into minifier.stats_clicks (minified_alias,click_cnt,last_clicked_ts) values (?,?,?) ";
 	final static String SQL_INSERT_NEW_STATS_LOG = "insert into minifier.stats_click_log (minified_alias,source_ip,user_agent,click_ts, referrer) values (?,?,?,?,?) ";
 	final static String SQL_UPDATE_CLICK_STATS = "UPDATE minifier.stats_clicks set click_cnt = (click_cnt + 1),last_clicked_ts  = ? where minified_alias = ?";
 	final static String SQL_GET_NEXT_ID = "select nextval('minifier.alias_seq')";
+	
 	static DataSource ds = null;
 
 	public PSQLDAO(DataSource ds) {
@@ -107,6 +108,34 @@ public class PSQLDAO implements IJDBCDAO {
 			}
 		}
 		return vo;
+	}
+	@Override
+	public boolean isAPIKeyExist(String apiKey) {
+		Connection conn = null;
+		URLVO vo = new URLVO();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(SQL_GET_APIKEY_INFO);
+			logger.debug("SQL to be run: "+" " +SQL_GET_APIKEY_INFO+" " +" Param: "+" " +apiKey);
+			stmt.setString(1, apiKey);
+
+			rs = stmt.executeQuery();
+			if (rs.next() == false)
+				return false;
+		} catch (SQLException e) {
+			logger.error("SQL Error", e);
+			throw new RuntimeUrlException("SQL Err", e);
+		} finally {
+			try {
+				stmt.close();
+				rs.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return true;
 	}
 
 	@Override

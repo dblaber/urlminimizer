@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.da4.urlminimizer.UrlMinimizer;
+import org.da4.urlminimizer.exception.APIKeyNotFound;
 
 /**
  * Servlet implementation class DoMinimize
@@ -73,7 +74,13 @@ public class DoMinimize extends HttpServlet {
 			System.out.println("Invalid URL!");
 		}
 		System.out.println("URL: " + url);
-		String mini = minimizer.minimize(url,null);
+		String mini = null;
+		try {
+			mini = minimizer.minimize(url,null);
+		} catch (APIKeyNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		response.getWriter().append("\nMini Url: " + mini);
 	}
 

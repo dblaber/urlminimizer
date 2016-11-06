@@ -63,5 +63,6 @@ public interface IJDBCDAO {
 void incrementClickCount(String alias, Date date);
 void insertStatsLog(String alias, String ip, String useragent, String referer, Date date);
 void insertNewClicksCount(String alias, Date date);
+boolean isAPIKeyExist(String apiKey);
 
 }

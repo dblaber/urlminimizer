@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
+import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.plugins.PluginAPI;
@@ -54,9 +55,10 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
  * Check in database to determine whether url exists, if it exists, return it
  * otherwise, pick from db sequences until one isn't in the reserved list
  * Persist once open sequence is found
+ * @throws APIKeyNotFound 
  */
 	@Override
-	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound {
 		super.execute(hook, operation, input, output, params);
 		boolean urlCreated = false;
 		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");
@@ -66,6 +68,10 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 		if (Operation.MAXIMIZE.equals(operation)) {
 			return dao.getDestinationUrlFromAlias((String) input);
 		} else if (Operation.MINIMIZE.equals(operation)) {
+			if(!dao.isAPIKeyExist((String)clientMetadata.get("CLIENT_KEY")))
+			{
+				throw new APIKeyNotFound((String)clientMetadata.get("CLIENT_KEY"));
+			}
 			URLVO url;
 			try {
 				url = dao.getAliasFromDestination((String) input);
