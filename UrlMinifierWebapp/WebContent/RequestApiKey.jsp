@@ -14,7 +14,7 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script type="text/javascript">
 	function sendBigUrl(url) {
-		$.getJSON("AjaxMinimize", {
+		$.getJSON("RequestApiKey", {
 			url : url
 		}).done(function(json) {
 			if(json == null || json.minifiedUrl == null || json.minifiedUrl == "")

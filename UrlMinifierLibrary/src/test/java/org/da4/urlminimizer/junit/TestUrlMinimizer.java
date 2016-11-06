@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.HashMap;
 
 import org.da4.urlminimizer.UrlMinimizer;
+import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class TestUrlMinimizer {
 	// }
 
 	@Test
-	public void testMinimize() {
+	public void testMinimize() throws APIKeyNotFound {
 		String small = mini.minimize("http://google.com",new HashMap<String,String>());
 		System.out.println("small url: " + small);
 		assertEquals(config.getRootUrl() + "xyz", small);
@@ -62,7 +63,7 @@ public class TestUrlMinimizer {
 	}
 
 	@Test
-	public void testMaximize() {
+	public void testMaximize() throws APIKeyNotFound {
 		String small = mini.maximize("xyz", new HashMap<String,String>());
 		System.out.println("big url: " + small);
 		assertEquals("http://google.com", small);

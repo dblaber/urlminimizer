@@ -60,9 +60,12 @@ public class ContextListener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent sce)  { 
+    	try
+    	{
     	logger.info("Initializing Application...");
     	String configFile = System.getProperty("CONFIG_XML");
     	logger.info("ConfigFile: " + configFile);
+    	java.util.logging.LogManager.getLogManager().reset();
     	if(configFile == null)
     		throw new RuntimeException("Config File Null! Can not start properly");
     	UrlMinimizer minimizer = null;
@@ -79,6 +82,10 @@ public class ContextListener implements ServletContextListener {
 			e.printStackTrace();
 		}
         sce.getServletContext().setAttribute("minimizer", minimizer);
+    	} catch(Exception e)
+    	{
+    		logger.fatal("Error setting up application", e);
+    	}
     }
 	
 }
