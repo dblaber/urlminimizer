@@ -26,11 +26,26 @@ public class Response {
 	private String url;
 	private String minifiedUrl;
 	private String error;
+	private String message;
+	
 	public Response(String url, String minifiedUrl) {
 		super();
 		this.url = url;
 		this.minifiedUrl = minifiedUrl;
 	}
+	
+	public Response() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public String getUrl() {
 		return url;
 	}

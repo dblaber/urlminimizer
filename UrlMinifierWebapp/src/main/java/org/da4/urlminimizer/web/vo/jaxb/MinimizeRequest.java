@@ -5,16 +5,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class MinimizeRequest {
-	@XmlElement(required=true)
 	private String apiKey;
-	@XmlElement(required=true)
 	private String url;
-	@XmlElement
 	private String[] metadata;
+	private String client;
+	public String getClient() {
+		return client;
+	}
+
+	public void setClient(String client) {
+		this.client = client;
+	}
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public void setMetadata(String[] metadata) {
+		this.metadata = metadata;
+	}
+	@XmlElement(required=true)
 	public String getApiKey() {
 		return apiKey;
 	}
-
+	@XmlElement
 	public String getUrl() {
 		return url;
 	}

@@ -27,6 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
@@ -49,7 +54,19 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
 	@Override
 	public void init(Map<String, String> params) {
 		super.init(params);
-		dao = new PSQLDAO(params.get("url"), params.get("userid"), params.get("password"));
+		Context initContext = null;
+		try {
+			initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			DataSource ds = (DataSource)envContext.lookup(params.get("jndiDS"));
+			dao = new PSQLDAO(ds);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//dao = new PSQLDAO(params.get("url"), params.get("userid"), params.get("password"));
+
+		
 	}
 /**
  * Check in database to determine whether url exists, if it exists, return it

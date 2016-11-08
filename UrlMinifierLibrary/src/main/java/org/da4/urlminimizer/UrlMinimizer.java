@@ -176,7 +176,7 @@ public class UrlMinimizer {
 		}
 		return realUrl.getDestination();
 	}
-
+	
 	/**
 	 * Shutdown the plugin system. Call when a long running container needs to
 	 * shutdown, for example a j2ee container

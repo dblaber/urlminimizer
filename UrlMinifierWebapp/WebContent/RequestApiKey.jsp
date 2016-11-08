@@ -14,8 +14,8 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script type="text/javascript">
 	function sendBigUrl(url) {
-		$.getJSON("RequestApiKey", {
-			url : url
+		$.getJSON("RequestApiKey.do", {
+			email : email
 		}).done(function(json) {
 			if(json == null || json.minifiedUrl == null || json.minifiedUrl == "")
 			{
@@ -32,10 +32,10 @@
 		return true;
 	}
 	$( document ).ready(function() {
-		$('#urlbox').on('keypress', function (e) {
+		$('#emailbox').on('keypress', function (e) {
 			 //e.preventDefault();
 	         if(e.which === 13){
-	        	 sendBigUrl($('#urlbox').val())
+	        	 sendBigUrl($('#emailbox').val())
 	         }
 	});
 	 
@@ -74,7 +74,7 @@ body {
 			<div class="o-form-element">
 				<div class="c-input-group c-input-group--stacked">
 					<div class="o-field">
-						<input class="c-field" id="urlbox" placeholder="Email Address">
+						<input class="c-field" id="emailbox" placeholder="Email Address">
 					</div>
 				</div>
 				<div class="o-form-element">
