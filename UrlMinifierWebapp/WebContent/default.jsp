@@ -17,12 +17,19 @@
 		$.getJSON("AjaxMinimize.do", {
 			url : url
 		}).done(function(json) {
+			
+			if(json != null && json.error != null && json.error != "")
+			{
+				var htmlToAppend = '<div class="c-text--loud"> Result</div><span class="c-code">'
+					$('#minifiedUrlArea').html(htmlToAppend + json.error + "</span>");
+
+			}
 			if(json == null || json.minifiedUrl == null || json.minifiedUrl == "")
 			{
 				return;
 			}
 			
-			console.log("JSON Data: " + json.minifiedUrl);
+
 			var htmlToAppend = '<div class="c-text--loud"> Result</div><span class="c-code">'
 			$('#minifiedUrlArea').html(htmlToAppend + json.minifiedUrl + "</span>");
 
