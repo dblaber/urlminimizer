@@ -41,6 +41,8 @@ public class WebAPIService {
 			throws MalformedURLException, APIKeyNotFound, AliasDisabledException {
 
 		MinimizeResponse response = new MinimizeResponse();
+		if(miniRequest.getApiKey().equalsIgnoreCase("WEBGUI"))
+			throw new APIKeyNotFound("APIKEY not allowed");
 		UrlMinimizer minimizer = (UrlMinimizer) context.getAttribute("minimizer");
 		String url = miniRequest.getUrl();
 		if (url == null || url.trim().equals(""))
