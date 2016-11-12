@@ -27,9 +27,12 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.print.attribute.standard.Destination;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
+import org.da4.urlminimizer.exception.AliasDisabledException;
 import org.da4.urlminimizer.exception.ConfigException;
 import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
@@ -115,9 +118,11 @@ public class UrlMinimizer {
 	 *            ip address of client requesting we create url
 	 * @param clientKey
 	 *            Client key of client that is requesting url be created
-	 * @return The minimized url for the destination
+	 * @return The minimized url for the {@link Destination}
+	 * @throws AliasDisabledException
+	 * @throws APIKeyNotFound
 	 */
-	public String minimize(String in, Map<String, String> clientMetadata) throws APIKeyNotFound{
+	public String minimize(String in, Map<String, String> clientMetadata) throws APIKeyNotFound,AliasDisabledException{
 		logger.debug("Maximizing " + in);
 		URLVO out = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -149,8 +154,10 @@ public class UrlMinimizer {
 	 * @param in
 	 *            Input as alias
 	 * @return Full destination url 'maximized'
+	*  @throws AliasDisabledException
+	 * @throws APIKeyNotFound
 	 */
-	public String maximize(String in, Map<String, String> clientMetadata) throws APIKeyNotFound{
+	public String maximize(String in, Map<String, String> clientMetadata) throws APIKeyNotFound,AliasDisabledException {
 		URLVO realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("CLIENT_METADATA", clientMetadata);
@@ -174,6 +181,8 @@ public class UrlMinimizer {
 		for (IPlugin plugin : postplugins) {
 			plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
+		if(realUrl.isDisabled())
+			throw new AliasDisabledException("Url is disabled due to abuse");
 		return realUrl.getDestination();
 	}
 	

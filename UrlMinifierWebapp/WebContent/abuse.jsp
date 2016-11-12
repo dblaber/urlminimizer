@@ -17,19 +17,12 @@
 		$.getJSON("AjaxMinimize.do", {
 			url : url
 		}).done(function(json) {
-			
-			if(json != null && json.error != null && json.error != "")
-			{
-				var htmlToAppend = '<div class="c-text--loud"> Result</div><span class="c-code">'
-					$('#minifiedUrlArea').html(htmlToAppend + json.error + "</span>");
-
-			}
 			if(json == null || json.minifiedUrl == null || json.minifiedUrl == "")
 			{
 				return;
 			}
 			
-
+			console.log("JSON Data: " + json.minifiedUrl);
 			var htmlToAppend = '<div class="c-text--loud"> Result</div><span class="c-code">'
 			$('#minifiedUrlArea').html(htmlToAppend + json.minifiedUrl + "</span>");
 
@@ -68,32 +61,15 @@ body {
 }
 </style>
 
-<title>URL Minimizer</title>
+<title>Disabled URL</title>
 
 </head>
 <body class="c-text">
 
 	<div id="main" class="u-center-block">
 	<div class="u-center-block__content">
-		<h1 class='c-heading'>ne8.org URL Minimizer</h1>
-		<p>Minimize and shorten your long URL. Short, simple, <a href="https://github.com/dblaber/urlminimizer"> Open
-			Source! </a></p> 
-			<div class = "u-xsmall"><span class="c-code c-code--multiline">http://stackoverflow.com/questions/6764...</span><img class="o-image" style="margin-left: auto;
-margin-right: auto; display: block; width:100px;height:100px;" src="arrow.png">
-			<span class="c-code c-code--multiline"> http://ne8.org/19  </span>
-			</div>
-			<div class="o-form-element">
-				<div class="c-input-group c-input-group--stacked">
-					<div class="o-field">
-						<input class="c-field" id="urlbox" placeholder="URL to minimize">
-					</div>
-				</div>
-				<div class="o-form-element">
-					<button class="c-button c-button--brand c-button--block"
-						onclick="sendBigUrl($('#urlbox').val())"> Minimize </button>
-				</div>
-			</div>
-
+		<h1 class='c-heading'>Disabled URL</h1>
+		<p> URL Has been disabled due to abuse.  Please contact disabledurl@ne8.org with minimized URL and/or maximized URL if this is a mistake. </p>
 		<div id="minifiedUrlArea"></div>
 	</div>
 	<div></div>

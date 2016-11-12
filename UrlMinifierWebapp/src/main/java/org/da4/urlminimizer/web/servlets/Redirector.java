@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.UrlMinimizer;
+import org.da4.urlminimizer.exception.AliasDisabledException;
 
 import com.google.common.net.HttpHeaders;
 
@@ -100,6 +101,11 @@ public class Redirector extends HttpServlet {
 		}
 		logger.debug("Maximimized URL: " + url);
 		response.sendRedirect(url);		
+		} catch (AliasDisabledException e)
+		{
+			logger.error("Exception",e);
+			response.sendRedirect("/abuse.jsp");
+			return;
 		}
 		catch (Exception e){
 			logger.error("Exception",e);

@@ -91,11 +91,14 @@ public class PSQLDAO implements IJDBCDAO {
 			rs = stmt.executeQuery();
 			if (rs.next() == false)
 				return null;
-
 			vo.setAlias(rs.getString("minified_alias"));
 			vo.setCreatorApiKey(rs.getString("creation_api_key"));
 			vo.setDestination(rs.getString("destination_url"));
 			vo.setIp(rs.getString("source_ip"));
+			vo.setTimeCreated(rs.getTimestamp("created_ts"));
+			vo.setUserAgent(rs.getString("user_agent"));
+			vo.setReferer(rs.getString("referrer"));
+			vo.setDisabled(rs.getBoolean("disabled"));
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
@@ -161,6 +164,7 @@ public class PSQLDAO implements IJDBCDAO {
 			vo.setTimeCreated(rs.getTimestamp("created_ts"));
 			vo.setUserAgent(rs.getString("user_agent"));
 			vo.setReferer(rs.getString("referrer"));
+			vo.setDisabled(rs.getBoolean("disabled"));
 		} catch (SQLException e) {
 			logger.error("SQL Error", e);
 			throw new RuntimeUrlException("SQL Err", e);
