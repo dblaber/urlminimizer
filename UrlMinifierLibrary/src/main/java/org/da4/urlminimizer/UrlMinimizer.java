@@ -29,6 +29,7 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.da4.urlminimizer.exception.AliasDisabledException;
 import org.da4.urlminimizer.exception.ConfigException;
 import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
@@ -115,8 +116,9 @@ public class UrlMinimizer {
 	 * @param clientKey
 	 *            Client key of client that is requesting url be created
 	 * @return The minimized url for the destination
+	 * @throws AliasDisabledException 
 	 */
-	public String minimize(String in, Map<String, String> clientMetadata) {
+	public String minimize(String in, Map<String, String> clientMetadata) throws AliasDisabledException {
 		logger.debug("Maximizing " + in);
 		URLVO out = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -139,6 +141,8 @@ public class UrlMinimizer {
 		for (IPlugin preplugins : postplugins) {
 			preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 		}
+		if(out.isDisabled())
+			throw new AliasDisabledException("Url is disabled due to abuse");
 		return config.getRootUrl() + out.getAlias();
 	}
 
@@ -148,8 +152,9 @@ public class UrlMinimizer {
 	 * @param in
 	 *            Input as alias
 	 * @return Full destination url 'maximized'
+	 * @throws AliasDisabledException 
 	 */
-	public String maximize(String in, Map<String, String> clientMetadata) {
+	public String maximize(String in, Map<String, String> clientMetadata) throws AliasDisabledException {
 		URLVO realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("CLIENT_METADATA", clientMetadata);
@@ -173,6 +178,8 @@ public class UrlMinimizer {
 		for (IPlugin plugin : postplugins) {
 			plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
+		if(realUrl.isDisabled())
+			throw new AliasDisabledException("Url is disabled due to abuse");
 		return realUrl.getDestination();
 	}
 

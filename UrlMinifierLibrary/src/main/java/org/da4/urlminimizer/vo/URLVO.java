@@ -36,7 +36,14 @@ public class URLVO {
 	private Date timeCreated;
 	private String referer;
 	boolean isSpam = false;
+	boolean disabled = false;
 	
+	public boolean isDisabled() {
+		return disabled;
+	}
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 	public String getReferer() {
 		return referer;
 	}
