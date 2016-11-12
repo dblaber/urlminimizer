@@ -145,6 +145,8 @@ public class UrlMinimizer {
 		for (IPlugin preplugins : postplugins) {
 			preplugins.execute(Hook.POSTPROCESSOR, Operation.MINIMIZE, in, null, paramMap);
 		}
+		if(out.isDisabled())
+			throw new AliasDisabledException("Url is disabled due to abuse");
 		return config.getRootUrl() + out.getAlias();
 	}
 
