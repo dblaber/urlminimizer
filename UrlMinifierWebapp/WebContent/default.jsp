@@ -100,6 +100,7 @@ margin-right: auto; display: block; width:100px;height:100px;" src="arrow.png">
 	</div>
 	<div id="footer" class="u-center-block__content u-center-block__content--horizontal">
 	<div  class="u-center-block__content">
+	<a href='https://play.google.com/store/apps/details?id=org.da4.org.urlminimizer.android.client&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img style = "height: auto; width:240px"  alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 	<div><span class="c-text--quiet">Copyright 2016 Darren Blaber.</span></div><p> Abuse Contact: abuse@ne8.org</p>
 	</div>
 	</div>
