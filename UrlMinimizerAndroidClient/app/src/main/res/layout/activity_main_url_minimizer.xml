@@ -30,55 +30,55 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="android.urlminimizer.da4.org.urlminimizerandroidclient.MainUrlMinimizerActivity">
+    tools:context="org.da4.urlminimizer.android.client.MainUrlMinimizerActivity">
 
     <TextView
+        android:id="@+id/aliasView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/aliasView"
-        android:layout_below="@+id/minimize_button"
         android:layout_alignEnd="@+id/minimize_description"
+        android:layout_below="@+id/minimize_button"
+        android:layout_marginTop="20dp"
         android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/minimize_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter url to Minimize"
-        android:id="@+id/minimize_description"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Enter url to Minimize" />
 
     <Button
-        android:text="Minimize"
+        android:id="@+id/minimize_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/minimize_button"
-        tools:layout_below="@+id/url_text"
-        android:onClick="onMinimizeClick"
         android:layout_below="@+id/url_text"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="onMinimizeClick"
+        android:text="Minimize"
+        tools:layout_below="@+id/url_text" />
 
     <TextView
-        android:text="URL Copied to Clipboard"
+        android:id="@+id/clipboardNoticeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/aliasView"
         android:layout_centerHorizontal="true"
-        android:textIsSelectable="true"
         android:layout_marginTop="19dp"
-        android:id="@+id/clipboardNoticeView"
+        android:text="URL Copied to Clipboard"
+        android:textIsSelectable="true"
         android:visibility="invisible" />
 
     <EditText
+        android:id="@+id/url_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textUri"
-        android:text="http://"
-        android:ems="10"
-        android:id="@+id/url_text"
-        android:layout_below="@+id/minimize_description"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/minimize_description"
+        android:ems="10"
+        android:inputType="textUri"
+        android:text="http://" />
 
 </RelativeLayout>

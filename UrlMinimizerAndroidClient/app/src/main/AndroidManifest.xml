@@ -22,7 +22,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.urlminimizer.da4.org.urlminimizerandroidclient">
+    package="org.da4.urlminimizer.android.client">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -32,7 +32,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainUrlMinimizerActivity">
+        <activity android:name="org.da4.urlminimizer.android.client.MainUrlMinimizerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

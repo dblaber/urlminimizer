@@ -20,18 +20,20 @@
  * under the License.
  */
 
-package android.urlminimizer.da4.org.urlminimizerandroidclient;
+package org.da4.urlminimizer.android.client;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by dmb on 11/13/16.
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-
-public class URLServiceException extends Exception {
-    public URLServiceException(String msg, Throwable e) {
-        super(msg, e);
-    }
-
-    public URLServiceException(String msg) {
-        super(msg);
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
     }
 }

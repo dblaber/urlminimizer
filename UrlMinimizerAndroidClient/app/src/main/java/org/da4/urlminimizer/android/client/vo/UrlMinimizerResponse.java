@@ -20,7 +20,7 @@
  * under the License.
  */
 
-package android.urlminimizer.da4.org.urlminimizerandroidclient.vo;
+package org.da4.urlminimizer.android.client.vo;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

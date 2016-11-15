@@ -20,29 +20,18 @@
  * under the License.
  */
 
-package android.urlminimizer.da4.org.urlminimizerandroidclient;
-
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
+package org.da4.urlminimizer.android.client;
 
 /**
- * Instrumentation test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Created by dmb on 11/13/16.
  */
-@RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
-    @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("android.urlminimizer.da4.org.urlminimizerandroidclient", appContext.getPackageName());
+public class URLServiceException extends Exception {
+    public URLServiceException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public URLServiceException(String msg) {
+        super(msg);
     }
 }

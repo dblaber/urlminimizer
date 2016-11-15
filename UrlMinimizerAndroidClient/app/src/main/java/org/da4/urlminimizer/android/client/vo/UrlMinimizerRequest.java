@@ -20,7 +20,7 @@
  * under the License.
  */
 
-package android.urlminimizer.da4.org.urlminimizerandroidclient.vo;
+package org.da4.urlminimizer.android.client.vo;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -42,6 +42,13 @@ public class UrlMinimizerRequest implements Serializable {
         @Element
         private String apiVersion;
 
+    public UrlMinimizerRequest(String apiKey, String url, String client, String apiVersion) {
+        this.apiKey = apiKey;
+        this.url = url;
+        this.client = client;
+        this.apiVersion = apiVersion;
+    }
+
         public String getClient() {
             return client;
         }
@@ -50,27 +57,29 @@ public class UrlMinimizerRequest implements Serializable {
             this.client = client;
         }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
         public void setApiKey(String apiKey) {
             this.apiKey = apiKey;
         }
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public void setMetadata(String[] metadata) {
-            this.metadata = metadata;
-        }
-        public String getApiKey() {
-            return apiKey;
-        }
         public String getUrl() {
             return url;
         }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
         public String[] getMetadata() {
             return metadata;
         }
+
+    public void setMetadata(String[] metadata) {
+        this.metadata = metadata;
+    }
 
         public String getApiVersion() {
             return apiVersion;
@@ -79,12 +88,5 @@ public class UrlMinimizerRequest implements Serializable {
         public void setApiVersion(String apiVersion) {
             this.apiVersion = apiVersion;
         }
-
-    public UrlMinimizerRequest(String apiKey, String url, String client, String apiVersion) {
-        this.apiKey = apiKey;
-        this.url = url;
-        this.client = client;
-        this.apiVersion = apiVersion;
-    }
 }
 

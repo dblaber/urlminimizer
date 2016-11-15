@@ -20,7 +20,7 @@
  * under the License.
  */
 
-package android.urlminimizer.da4.org.urlminimizerandroidclient;
+package org.da4.urlminimizer.android.client;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,46 +40,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static android.app.PendingIntent.getActivity;
 import static android.content.Intent.EXTRA_TEXT;
 
 /**
  * Main and only activity for URL Minimizer. Simple activity for minimizing a url
  */
 public class MainUrlMinimizerActivity extends AppCompatActivity {
-    private class HandleUrlCreationThread extends AsyncTask<String,Void,String>
-    {
-        Exception e = null;
+    MinimizeUrlService urlService = null;
 
-        @Override
-        protected String doInBackground(String... strings) {
-            for(String url :strings)
-            {
-                try {
-                    return urlService.minimizeUrl(url);
-                } catch (URLServiceException e) {
-                   this.e = e;
-                }
 
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if(e != null)
-                quickNotify(e.getMessage());
-            if(s == null)
-                return;
-            Log.d(HandleUrlCreationThread.class.getName(),s);
-            addUrlToUi(s);
-
-        }
+    public MainUrlMinimizerActivity() {
     }
 
-
-    MinimizeUrlService urlService = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +134,32 @@ public class MainUrlMinimizerActivity extends AppCompatActivity {
 
     }
 
-    public MainUrlMinimizerActivity() {
+    private class HandleUrlCreationThread extends AsyncTask<String, Void, String> {
+        Exception e = null;
+
+        @Override
+        protected String doInBackground(String... strings) {
+            for (String url : strings) {
+                try {
+                    return urlService.minimizeUrl(url);
+                } catch (URLServiceException e) {
+                    this.e = e;
+                }
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (e != null)
+                quickNotify(e.getMessage());
+            if (s == null)
+                return;
+            Log.d(HandleUrlCreationThread.class.getName(), s);
+            addUrlToUi(s);
+
+        }
     }
 }

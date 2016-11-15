@@ -20,14 +20,14 @@
  * under the License.
  */
 
-package android.urlminimizer.da4.org.urlminimizerandroidclient;
+package org.da4.urlminimizer.android.client;
 
-import android.urlminimizer.da4.org.urlminimizerandroidclient.vo.UrlMinimizerRequest;
-import android.urlminimizer.da4.org.urlminimizerandroidclient.vo.UrlMinimizerResponse;
 import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.da4.urlminimizer.android.client.vo.UrlMinimizerRequest;
+import org.da4.urlminimizer.android.client.vo.UrlMinimizerResponse;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
