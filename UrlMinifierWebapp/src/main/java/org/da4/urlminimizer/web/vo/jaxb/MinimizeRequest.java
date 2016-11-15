@@ -9,6 +9,7 @@ public class MinimizeRequest {
 	private String url;
 	private String[] metadata;
 	private String client;
+	private int apiVersion;
 	public String getClient() {
 		return client;
 	}
@@ -39,6 +40,14 @@ public class MinimizeRequest {
 
 	public String[] getMetadata() {
 		return metadata;
+	}
+
+	public int getApiVersion() {
+		return apiVersion;
+	}
+	@XmlElement(required=true)
+	public void setApiVersion(int version) {
+		this.apiVersion = version;
 	}
 
 	
