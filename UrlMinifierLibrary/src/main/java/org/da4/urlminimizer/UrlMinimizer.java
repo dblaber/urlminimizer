@@ -33,6 +33,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.exception.AliasDisabledException;
+import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.ConfigException;
 import org.da4.urlminimizer.plugins.IPlugin;
 import org.da4.urlminimizer.vo.ConfigVO;
@@ -158,8 +159,9 @@ public class UrlMinimizer {
 	 * @return Full destination url 'maximized'
 	*  @throws AliasDisabledException
 	 * @throws APIKeyNotFound
+	 * @throws AliasNotFound 
 	 */
-	public String maximize(String in, Map<String, String> clientMetadata) throws APIKeyNotFound,AliasDisabledException {
+	public String maximize(String in, Map<String, String> clientMetadata) throws APIKeyNotFound,AliasDisabledException, AliasNotFound {
 		URLVO realUrl = null;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("CLIENT_METADATA", clientMetadata);
@@ -185,6 +187,8 @@ public class UrlMinimizer {
 		}
 		if(realUrl != null && realUrl.isDisabled())
 			throw new AliasDisabledException("Url is disabled due to abuse");
+		if(realUrl == null)
+			throw new AliasNotFound("Alias not found: " + in);
 		return realUrl.getDestination();
 	}
 	

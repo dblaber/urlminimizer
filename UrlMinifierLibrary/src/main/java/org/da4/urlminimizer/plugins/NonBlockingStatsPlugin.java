@@ -73,7 +73,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 						continue;
 					}
 					// first log
-					logger.debug("Updating stats for alias" + statsReq.getAlias());
+					logger.debug("Updating stats for alias: " + statsReq.getAlias());
 					dao.insertStatsLog(statsReq.getAlias(), statsReq.getIp(), statsReq.getUserAgent(),
 							statsReq.getReferer(), new Date());
 					dao.incrementClickCount(statsReq.getAlias(), new Date());
