@@ -125,7 +125,7 @@ public class NonBlockingStatsPlugin extends PluginAPI {
 						(String) clientMetadata.get("REFERER"), (String) clientMetadata.get("IP"), false);
 				statQueue.add(vo);
 			} else {
-				logger.debug("Url not found, ignoring" + (String) input);
+				logger.debug("Url not found, ignoring: " + (String) input);
 			}
 		} else if (operation.equals(Operation.MINIMIZE)) {
 			//
