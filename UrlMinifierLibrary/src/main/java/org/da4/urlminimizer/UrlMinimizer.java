@@ -183,7 +183,7 @@ public class UrlMinimizer {
 		for (IPlugin plugin : postplugins) {
 			plugin.execute(Hook.POSTPROCESSOR, Operation.MAXIMIZE, in, null, paramMap);
 		}
-		if(realUrl.isDisabled())
+		if(realUrl != null && realUrl.isDisabled())
 			throw new AliasDisabledException("Url is disabled due to abuse");
 		return realUrl.getDestination();
 	}
