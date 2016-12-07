@@ -45,6 +45,9 @@ public class WebAPIService {
 			throw new APIKeyNotFound("APIKEY not allowed");
 		UrlMinimizer minimizer = (UrlMinimizer) context.getAttribute("minimizer");
 		String url = miniRequest.getUrl();
+		url = url.trim();
+		if(!url.contains("."))
+			throw new RuntimeUrlException("Invalid URL! Must contain at least one '.'");
 		if (url == null || url.trim().equals(""))
 			throw new RuntimeUrlException("Empty Url!");
 		logger.debug("Raw Url: " + url);

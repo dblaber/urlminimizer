@@ -77,11 +77,14 @@ public class AjaxMinimize extends HttpServlet {
 		response.setContentType("application/json");
 		UrlMinimizer minimizer =  (UrlMinimizer) request.getServletContext().getAttribute("minimizer");
 		String url = request.getParameter("url");
+		url = url.trim();
 		if(url == null || url.trim().equals(""))
 			throw new RuntimeUrlException("Empty Url!");
 		logger.debug("Raw Url: " + url);
 		if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://"))
 			url = "http://" + url;
+		if(!url.contains("."))
+			throw new RuntimeUrlException("Invalid URL! Must contain one '.'");
 		logger.debug("Converted url: " + url);
 		String protocol = new URL(url).getProtocol();
 		logger.debug("Protocol: " + protocol);
