@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
+import org.da4.urlminimizer.exception.URLException;
 import org.da4.urlminimizer.vo.URLVO;
 
 import com.google.common.cache.Cache;
@@ -56,7 +57,7 @@ public void init(Map<String, String> params) {
 	
 }
 @Override
-	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound, URLException {
 		if(operation.equals(Operation.MAXIMIZE)){
 			if(hook.equals(Hook.POSTPROCESSOR))
 			{

@@ -22,7 +22,7 @@
  *******************************************************************************/
 package org.da4.urlminimizer.exception;
 
-public class AliasNotFound extends Exception {
+public class AliasNotFound extends URLException {
 	public AliasNotFound(String msg, Throwable e) {
 		super(msg, e);
 	}

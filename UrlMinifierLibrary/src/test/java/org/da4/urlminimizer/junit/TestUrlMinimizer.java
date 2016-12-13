@@ -32,6 +32,7 @@ import org.da4.urlminimizer.UrlMinimizer;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.exception.AliasDisabledException;
 import org.da4.urlminimizer.exception.AliasNotFound;
+import org.da4.urlminimizer.exception.URLException;
 import org.da4.urlminimizer.vo.ConfigVO;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class TestUrlMinimizer {
 	// }
 
 	@Test
-	public void testMinimize() throws AliasDisabledException, APIKeyNotFound{
+	public void testMinimize() throws APIKeyNotFound, URLException{
 		Map<String,String> clientMetadata = new HashMap<String,String>();
 		clientMetadata.put("CLIENT_KEY", "WEBGUI");
 		String small = mini.minimize("http://google.com",clientMetadata);
@@ -68,7 +69,7 @@ public class TestUrlMinimizer {
 	}
 
 	@Test
-	public void testMaximize() throws AliasDisabledException,APIKeyNotFound, AliasNotFound {
+	public void testMaximize() throws APIKeyNotFound, URLException {
 		String small = mini.maximize("xyz", new HashMap<String,String>());
 		System.out.println("big url: " + small);
 		assertEquals("http://google.com", small);

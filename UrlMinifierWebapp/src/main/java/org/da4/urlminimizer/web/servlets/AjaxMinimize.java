@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.UrlMinimizer;
+import org.da4.urlminimizer.exception.URLBlockedException;
 import org.da4.urlminimizer.exception.AliasDisabledException;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
 import org.da4.urlminimizer.web.exception.RuntimeUrlWebException;
@@ -107,7 +108,7 @@ public class AjaxMinimize extends HttpServlet {
 		Response resp = new Response(url, mini);
 		logger.trace("JSON Response: " + gson.toJson(resp));
 		response.getWriter().append(gson.toJson(resp));
-		} catch (RuntimeUrlWebException | AliasDisabledException|org.da4.urlminimizer.exception.RuntimeUrlException e)
+		} catch (RuntimeUrlWebException | AliasDisabledException|URLBlockedException|org.da4.urlminimizer.exception.RuntimeUrlException e)
 		{
 			Response resp = new Response(null, null);
 			resp.setError(e.getMessage());

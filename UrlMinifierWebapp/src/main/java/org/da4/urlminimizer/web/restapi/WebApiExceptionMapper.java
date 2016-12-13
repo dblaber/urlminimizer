@@ -9,6 +9,7 @@ import javax.ws.rs.ext.Provider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
+import org.da4.urlminimizer.exception.URLBlockedException;
 import org.da4.urlminimizer.exception.AliasDisabledException;
 import org.da4.urlminimizer.web.vo.jaxb.MinimizeResponse;
 
@@ -18,7 +19,7 @@ public class WebApiExceptionMapper implements ExceptionMapper<Exception> {
 	// enhance error handling in future, for now constants
 	static final int ERROR_NOAPIKEY = 800;
 	static final int ERROR_ALIAS_DISABLED = 801;
-
+	static final int ERROR_URL_DISABLED = 802;
 	@Produces(MediaType.APPLICATION_XML)
 	@Override
 	public Response toResponse(Exception e) {
@@ -30,7 +31,13 @@ public class WebApiExceptionMapper implements ExceptionMapper<Exception> {
 		} else if (e instanceof AliasDisabledException) {
 			response.setErrorCode(ERROR_ALIAS_DISABLED);
 			response.setError(e.getMessage());
-		} else {
+		} else if (e instanceof URLBlockedException)
+		{
+			response.setErrorCode(ERROR_URL_DISABLED);
+			response.setError("URL has been blocked ");
+		}
+				
+				else {
 			response.setErrorCode(500);
 			response.setError(e.getMessage());
 		}

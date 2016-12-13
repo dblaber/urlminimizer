@@ -21,6 +21,7 @@ import org.da4.urlminimizer.UrlMinimizer;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.exception.AliasDisabledException;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
+import org.da4.urlminimizer.exception.URLException;
 import org.da4.urlminimizer.web.vo.jaxb.MinimizeRequest;
 import org.da4.urlminimizer.web.vo.jaxb.MinimizeResponse;
 
@@ -38,7 +39,7 @@ public class WebAPIService {
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 	public MinimizeResponse minimizeUrl(@Valid MinimizeRequest miniRequest)
-			throws MalformedURLException, APIKeyNotFound, AliasDisabledException {
+			throws MalformedURLException, APIKeyNotFound, URLException {
 
 		MinimizeResponse response = new MinimizeResponse();
 		if(miniRequest.getApiKey().equalsIgnoreCase("WEBGUI"))

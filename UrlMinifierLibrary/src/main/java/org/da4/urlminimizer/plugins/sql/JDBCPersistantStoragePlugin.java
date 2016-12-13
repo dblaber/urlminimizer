@@ -39,6 +39,7 @@ import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
 import org.da4.urlminimizer.exception.AliasNotFound;
 import org.da4.urlminimizer.exception.RuntimeUrlException;
+import org.da4.urlminimizer.exception.URLException;
 import org.da4.urlminimizer.plugins.PluginAPI;
 import org.da4.urlminimizer.vo.URLVO;
 /**
@@ -61,9 +62,10 @@ public class JDBCPersistantStoragePlugin extends PluginAPI {
  * otherwise, pick from db sequences until one isn't in the reserved list
  * Persist once open sequence is found
  * @throws APIKeyNotFound 
+ * @throws URLException 
  */
 	@Override
-	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound {
+	public URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound, URLException {
 		super.execute(hook, operation, input, output, params);
 		boolean urlCreated = false;
 		Map<String,String> clientMetadata = (Map<String,String>)params.get("CLIENT_METADATA");

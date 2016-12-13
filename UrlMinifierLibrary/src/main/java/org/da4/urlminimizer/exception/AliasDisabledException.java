@@ -22,7 +22,7 @@
  *******************************************************************************/
 package org.da4.urlminimizer.exception;
 
-public class AliasDisabledException extends Exception {
+public class AliasDisabledException extends URLException {
 	public AliasDisabledException(String msg, Throwable e) {
 		super(msg, e);
 	}

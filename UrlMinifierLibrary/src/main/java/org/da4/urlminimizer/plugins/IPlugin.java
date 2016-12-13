@@ -27,6 +27,7 @@ import java.util.Map;
 import org.da4.urlminimizer.Hook;
 import org.da4.urlminimizer.Operation;
 import org.da4.urlminimizer.exception.APIKeyNotFound;
+import org.da4.urlminimizer.exception.URLException;
 import org.da4.urlminimizer.vo.URLVO;
 /**
  * Plugin api. Method plugin must implement to hook into the url minimizer
@@ -49,8 +50,9 @@ public interface IPlugin {
  * @param params Additional parameters that can be passed to the plugin at runtime
  * @return An object can be returned from plugin that can be used in workflow of minimization
  * @throws APIKeyNotFound 
+ * @throws URLException
  */
-	URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound;
+	URLVO execute(Hook hook, Operation operation, Object input, Object output, Map<String, Object> params) throws APIKeyNotFound,URLException;
 	/**
 	 * Called during termination of the plugin
 	 */
