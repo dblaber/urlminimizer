@@ -6,7 +6,7 @@
 <meta name="Description" content="Simple, free fast open source free url shortener. Make a large url smaller without the hastle. ">
 <meta name="Keywords" content="url minimizer,ne8.org,url shortener, open source,tinyurl,url shortening service">
 <link rel="stylesheet" href="https://unpkg.com/blaze">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+<script src="https://unpkg.com/blaze@3.2.2/dist/blaze.min.css"
 	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 	crossorigin="anonymous" type="text/javascript"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
